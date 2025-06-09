@@ -21,7 +21,7 @@ module.exports = {
             const allUserOrders = await Order.find({user:req.user.id})
 
             let orderHistory;
-            console.log({allUserOrders})
+            // console.log({allUserOrders})
             if (allUserOrders.length && selection){
                 orderHistory = allUserOrders.filter(order => order.restaurant.toString() === selection._id.toString());
             }
@@ -85,7 +85,7 @@ module.exports = {
     },
     submitOrder: async (req,res) =>{
         try{
-            
+            console.log('running order submission')
             const user = await User.findById(req.user.id).populate('group')
 
             const order = await Order.create({
@@ -109,6 +109,7 @@ module.exports = {
     },
     changeOrder: async (req,res) =>{
         try{
+            console.log('running order change')
             const user = await User.findById(req.user.id).populate('group')
 
             const order = await Order.create({

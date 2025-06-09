@@ -40,23 +40,26 @@
             <li class="address">Address: <%= selection.address %></li>
         </ul>
         <% if (history.length){ %>
-        <div class="order-history">
+            <div class="order-history">
             <h4>Previous Orders from <%= selection.name %></h4>
             <% if (hasOrdered) history = history.slice(0,-1) %>
+            <!-- <form action="/orders/submitPrevOrder" method="POST"></form> -->
             <% history.forEach(el => { %>
-                <div class="prev-order-group">
-                    <ul>
-                        <li class="prev-order">
-                            <p><%= el.order %></p>
-                        </li>
-                        <li class="prev-notes">
-                            <p><%= el.notes %></p>
-                        </li>
-                        <li class="prev-date">
-                            <p><%= el.createdAt %></p>
-                        </li>
-                    </ul>
-                </div>
+            <div class="prev-order-group">
+                 <input type="hidden" id="hasOrdered" value="<%= hasOrdered %>">
+                <ul>
+                    <li class="prev-order">
+                        <p><%= el.order %></p>
+                    </li>
+                    <li class="prev-notes">
+                        <p><%= el.notes %></p>
+                    </li>
+                    <li class="prev-date">
+                        <p><%= el.createdAt.toDateString() %></p>
+                    </li>
+                </ul>
+                <button class="resubmit-order">Submit This Order Again</button>
+            </div>
             <% }) %>
         </div>
         <%}%>
