@@ -25,6 +25,7 @@ module.exports = {
             if (allUserOrders.length && selection){
                 orderHistory = allUserOrders.filter(order => order.restaurant.toString() === selection._id.toString());
             }
+            if (orderHistory.length) orderHistory = orderHistory.reverse();
 
             // console.log({allUserOrders, selection})
 
