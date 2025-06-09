@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    
+
+    <!-- Incoming:
+     otherRests: [{Restaurants not in group}],
+     groupRestaurants: [{Restaurants in group}],
+     isAdmin: Boolean,
+     selection: {Restaurant},
+     isSelector: Boolean,
+     orders: [{Orders}],
+     members: [{Users}]
+      -->
+
+    <div class="form-container">
+        <div class="form-line" onclick="toggleForm(event)">
+            <span>Submit today's restaurant!</span>
+            <span class="expand-icon">▼</span>
+        </div>
+        
+        <div class="form-content">
+            <div class="form-inner">
+                <form action="/groupHome/submitChoice" method="POST">
+                    <% groupRestaurants.forEach(el => { %>
+                    <div class="form-group">
+                        <input type="radio" name="restId" value="<%=el._id%>" id="<%=el._id%>">
+                        <label for="<%=el._id%>"><%=el.name%></label>
+                        <ul>
+                            <li><p><a href="<%= el.menu %>" target="_blank">Menu</a></p></li>
+                            <li><p>Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></p></li>
+                            <li><p>Address: <%= el.address %></p></li>
+                        </ul>
+                    </div>
+                    <% }) %>
+                    <% if (!groupRestaurants.length){ %>
+                    <p>No restaurants exist. Add existing or new ones below.</p>
+                    <% } %>
+                    <% if (isSelector){ %>
+                    <button type="submit" class="submit-btn">Submit Choice</button>
+                    <% }else{ %>
+                    <p>It's not your choice today!</p>
+                    <% } %>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <div class="form-line" onclick="toggleForm(event)">
+            <span>Remove Restaurants from Your Group!</span>
+            <span class="expand-icon">▼</span>
+        </div>
+        
+        <div class="form-content">
+            <div class="form-inner">
+                <form action="/groupHome/deleteRest" method="POST">
+                    <% groupRestaurants.forEach(el => { %>
+                    <div class="form-group">
+                        <input type="checkbox" name="restId" value="<%=el._id%>" id="<%=el._id%>">
+                        <label for="<%=el._id%>"><%=el.name%></label>
+                        <ul>
+                            <li><p><a href="<%= el.menu %>" target="_blank">Menu</a></p></li>
+                            <li><p>Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></p></li>
+                            <li><p>Address: <%= el.address %></p></li>
+                        </ul>
+                    </div>
+                    <% }) %>
+                    <% if (!groupRestaurants.length){ %>
+                    <p>No restaurants exist in group.</p>
+                    <% } %>
+                    <% if (isAdmin){ %>
+                    <button type="submit" class="submit-btn">Remove Restaurants</button>
+                    <% }else{ %>
+                    <p>You're not this groups administrator!</p>
+                    <% } %>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!--  add a nav bar across pages, make sure each page only loads certain forms for admins and selector -->
+
+    <!-- add a page with a form for the selector to mark orders as placed (add prop to Order Schema) (use button with event listener in public/_____.js file ) -->
+
+    <!-- add helper functions to choose random selector from members, clear selection, clear orders -->
+        <!-- would this work with a wrapper function that will have a null date, return the function that check if the date exists on the same day, if so set it to current date and do nothing, if not set it to current date and call setNewSelector.method(user.group.id) -->
+
+    
+    <div class="form-container">
+        <div class="form-line" onclick="toggleForm(event)">
+            <span>Add Existing Restaurant To Your Group!</span>
+            <span class="expand-icon">▼</span>
+        </div>
+        
+        <div class="form-content">
+            <div class="form-inner">
+                <form action="/groupHome/addExistingRestaurant" method="POST">
+                    <% otherRests.forEach(el => { %>
+                    <div class="form-group">
+                        <input type="radio" name="restId" value="<%=el._id%>" id="<%=el._id%>">
+                        <label for="restId"><%=el.name%></label>
+                        <ul>
+                            <li><p><a href="<%= el.menu %>" target="_blank">Menu</a></p></li>
+                            <li><p>Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></p></li>
+                            <li><p>Address: <%= el.address %></p></li>
+                        </ul>
+                    </div>
+                    <% }) %>
+                    <% if (!otherRests.length){ %>
+                    <p>The group contains all restaurants in the database.</p>
+                    <% } %>
+                    <button type="submit" class="submit-btn">Add To Group</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-container">
+        <div class="form-line" onclick="toggleForm(event)">
+            <span>Create New Restaurant and Add it To Your Group!</span>
+            <span class="expand-icon">▼</span>
+        </div>
+        
+        <div class="form-content">
+            <div class="form-inner">
+                <form action="/groupHome/addNewRestaurant" method="POST">
+                    <div class="form-group">
+                        <input type="text" placeholder="Name" name='restaurantName'>
+                        <input type="url" placeholder="Menu Site" name='restaurantURL'>
+                        <input type="tel" placeholder="Telephone" name='restaurantPhone'>
+                        <input type="address" placeholder="Address" name='address'>
+                    </div>
+                    <button type="submit" class="submit-btn">Create Restaurant</button>
+                </form>
+            </div>
+        </div>
+    </div> 
+
+    <a href="/logout">Logout</a>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

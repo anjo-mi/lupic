@@ -1,0 +1,129 @@
+const Restaurant = require('../models/Restaurant')
+const Group = require('../models/Group')
+const User = require('../models/User')
+const Reset = require('../helpers/groupReset')
+
+module.exports = {
+    getRestaurants: async (req,res)=>{
+        try{
+            const user = await User.findById(req.user.id).populate({
+                path: 'group',
+                populate: [
+                    {path: 'selection'},
+                    {path: 'selector'},
+                    {path: 'restaurants'},
+                    {path: 'orders'},
+                    {path: 'members'},
+                ]
+            })
+            if (!user.group) return res.status(400).json({error: `User is not in a group!`})
+            
+            
+            let {
+                group: {
+                    _id: groupId,
+                    members,
+                    restaurants: groupRestaurants,
+                    adminId,
+                    selection,
+                    selector,
+                    orders,
+                    lastUpdated,
+                    selectorIndex
+                }
+            } = user
+
+            if (!lastUpdated || lastUpdated.toDateString() !== new Date().toDateString()){
+                await Reset.clearOrders(groupId);
+                const updatedGroup = await Reset.getNextSelector(groupId, selectorIndex, members);
+                selection = updatedGroup.selection;
+                selector = updatedGroup.selector;
+                orders = updatedGroup.orders;
+            }
+
+
+            const restItems = await Restaurant.find()
+            const groupsRestIds = new Set(
+                groupRestaurants.map(rest => rest._id.toString())
+            );
+            const otherRests = restItems.filter(rest => !groupsRestIds.has(rest._id.toString()));
+
+            const isAdmin = adminId === req.user.id;
+            const isSelector = selector._id.toString() === user._id.toString();
+
+            // check to make sure all orders are placed
+            res.render('groupHome.ejs', {
+                otherRests,
+                groupRestaurants,
+                isAdmin,
+                selection,
+                isSelector,
+                orders,
+                members,
+            })
+        }catch(err){
+            console.log(err)
+        }
+    },
+    addNewRestaurant: async (req, res)=>{
+        try{
+            const newRest = await Restaurant.create({name: req.body.restaurantName, menu: req.body.restaurantURL, phone: req.body.restaurantPhone, address: req.body.address})
+            await Group.findOneAndUpdate(
+                {_id: req.user.group},
+                {$addToSet:{restaurants: newRest._id}}
+            )
+            console.log('Restaurant has been added!')
+            res.redirect('/groupHome')
+        }catch(err){
+            console.log(err)
+        }
+    },
+    addExistingRestaurant: async (req, res)=>{
+        try{
+            await Group.findOneAndUpdate(
+                {_id:req.user.group},
+                {$addToSet: {restaurants: req.body.restId}}
+            )
+            console.log('Marked Complete')
+            res.redirect('/groupHome')
+        }catch(err){
+            console.log(err)
+        }
+    },
+    submitChoice: async (req,res) =>{
+        try{
+            const group = await Group.findOneAndUpdate(
+                {_id:req.user.group},
+                {selection:req.body.restId}
+            )
+            console.log('group selection marked')
+            res.redirect('/orders')
+        }catch(err){
+            console.log(err)
+        }
+    },
+    // TODO: add selection to Group Schema
+    //       add selector  to Group Schema
+    //      ?add isSelector to User Schema?
+    //      ?helpers folder for clearing data?
+
+    // make order schema / order controller / order.ejs to display / change / delete order
+
+    deleteRestaurant: async (req, res)=>{
+        try{
+            const user = await User.findById(req.user.id);
+
+            const restIds = Array.isArray(req.body.restId) ? req.body.restId : [req.body.restId]
+
+            const group = await Group.findByIdAndUpdate(
+                user.group,
+                {$pull: {restaurants: {$in: restIds}}},
+                {new: true},
+            )
+            console.log('Deleted Restaurant(s)')
+            res.redirect(`/groupHome`)
+        }catch(err){
+            console.log(err)
+        }
+    }
+}   

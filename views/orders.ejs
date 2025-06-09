@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <!-- coming in i have :
+     whole user Object,
+     hasOrdered: Boolean,
+     isSelector: Boolean,
+     history: all user's orders from selected restaurant
+     restaurants: [{restaurants}]
+     selection: {restaurant} -->
+    
+    
+    <% if (selection){ %>
+    <h1><%= selector.userName + "'s" %> choice today was <%= selection.name %></h1>
+    <% }else{ %>
+    <h1><%= selector.userName %> has not made a selection yet!</h1>
+    <% } %>
+    
+    <main class="order">
+        <% if (hasOrdered){ %>
+        <h3><%= `${user.userName}'s current order for today:` %></h3>
+        <p><%= `Order: ${history[history.length - 1].order}` %></p>
+        <p><%= `Notes: ${history[history.length - 1].notes}` %></p>
+        <% } %>
+    </main>
+    <% if (selection){ %>
+    <h3>
+        View the <%= selection.name %> Details
+    </h3>
+    <div class="selection-details">
+        <ul>
+            <li class="menu"><a href="<%= selection.menu %>">Menu</a></li>
+            <li class="phone">Phone: <%= `${selection.phone.slice(0,3)}-${selection.phone.slice(3,6)}-${selection.phone.slice(7)}` %></li>
+            <li class="address">Address: <%= selection.address %></li>
+        </ul>
+        <% if (history.length){ %>
+        <div class="order-history">
+            <h4>Previous Orders from <%= selection.name %></h4>
+            <% if (hasOrdered) history = history.slice(0,-1) %>
+            <% history.forEach(el => { %>
+                <div class="prev-order-group">
+                    <ul>
+                        <li class="prev-order">
+                            <p><%= el.order %></p>
+                        </li>
+                        <li class="prev-notes">
+                            <p><%= el.notes %></p>
+                        </li>
+                        <li class="prev-date">
+                            <p><%= el.createdAt %></p>
+                        </li>
+                    </ul>
+                </div>
+            <% }) %>
+        </div>
+        <%}%>
+    </div>
+    <% } %>
+    <% if (!hasOrdered){ %>
+    <form action="/orders/submitOrder" method="POST">
+        <fieldset>
+            <legend>Place Your Order here</legend>
+            <textarea name="userOrder" id="userOrder" rows="5" cols="40"></textarea>
+            <textarea name="notes" id="notes" rows="5" cols="40"></textarea>
+            <% if (selection){ %>
+            <input type="submit">
+            <% }else{ %>
+            <p>Restaurant selection has not been submitted yet.</p>
+            <% } %>
+        </fieldset>
+    </form>
+    <% }else{ %>
+    <form action="/orders/changeOrder" method="POST">
+        <fieldset>
+            <legend>Change Your Order here</legend>
+            <textarea name="userOrderChanges" id="userOrder" rows="5" cols="40"></textarea>
+            <textarea name="notesChanges" id="notes" rows="5" cols="40"></textarea>
+            <% if (selection){ %>
+            <input type="submit">
+            <% }else{ %>
+            <p>Restaurant selection has not been submitted yet.</p>
+            <% } %>
+        </fieldset>
+    </form>
+    <% } %>
+    <form action="/orders/changeRestaurant" method="POST">
+        <fieldset>
+            <legend>Change Today's Selection</legend>
+            <div class="form-carousel">
+                <%  %>
+                <% restaurants.forEach(el => { %>
+                <input type="radio" name="newSelection" value="<%= el._id %>">
+                <label for="newSelection"><%= el.name %></label>
+                <ul>
+                    <li class="menu"><a href="<%= el.menu %>">Menu</a></li>
+                    <li class="phone">Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></li>
+                    <li class="address">Address: <%= el.address %></li>
+                </ul>
+                <% }) %>
+            </div>
+            <% if (isSelector){ %>
+            <input type="hidden" name="groupId" value="<%= user.group._id %>">
+            <input type="submit">
+            <% }else{ %>
+            <p>It's not your turn to make the selection today.</p>
+            <% } %>
+        </fieldset>
+    </form>
+    
+    <script src="js/main.js"></script>
+</body>
+</html>

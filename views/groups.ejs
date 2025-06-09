@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <h1>Groups</h1>
+    <% if (groups.length){ %>
+    <form action="/groups/joinGroup" method="POST">
+        <fieldset>
+            <legend>Existing Groups</legend>
+        <% groups.forEach( el => { %>
+            <div>
+                <input type="radio" value="<%= el._id %>" name="groupId" id="<%=el._id%>">
+                <label for="groupId"><%=el.name%></label>
+            </div>
+        <% }) %>
+            <input type="submit" value="Join Group">
+        </fieldset>
+            
+    </form>
+        <p>Or create your own new group below!</p>
+    <%}else{%>
+        <p>No groups currently exist. Create the first below!</p>
+    <% }%>
+
+
+    <form action="/groups/createGroup" method='POST'>
+        <input type="text" placeholder="enter group name" name='groupName'>
+        <input type="submit">
+    </form>
+
+    <a href="/logout">Logout</a>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
