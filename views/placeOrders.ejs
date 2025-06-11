@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <% if (orders.length){ %>
+    <form action="placement/placeOrders" method="POST">
+        <% orders.forEach(el => { %>
+        <input type="checkbox" name="orderId" value="<%= el._id %>">
+        <label for="orderId">
+            <!-- populate users in order retrieval in getGroupOrders -->
+            <%= order.user.userName %>'s order</label>
+        <% }) %>
+    </form>
+    <% } %>
+</body>
+</html>
