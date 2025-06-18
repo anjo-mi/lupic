@@ -12,8 +12,12 @@
         <input type="checkbox" name="orderId" value="<%= el._id %>">
         <label for="orderId">
             <!-- populate users in order retrieval in getGroupOrders -->
-            <%= order.user.userName %>'s order</label>
+            <%= el.user.userName %>'s order</label>
         <% }) %>
+        <input type="submit" value="Mark These Orders As Placed">
+        <% if (!allOrdersSubmitted){ %>
+        <p>Beware! Not All Group Members have submitted their orders yet!</p>
+        <% } %>
     </form>
     <% } %>
 </body>

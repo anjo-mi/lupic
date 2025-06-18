@@ -11,6 +11,7 @@ const mainRoutes = require('./routes/main')
 const groupRoutes = require('./routes/groups')
 const groupHomeRoutes = require('./routes/groupHome')
 const orderRoutes = require('./routes/orders')
+const placementRoutes = require('./routes/placement')
 
 require('dotenv').config({path: './config/.env'})
 
@@ -44,7 +45,8 @@ app.use('/', mainRoutes)
 app.use('/groups', groupRoutes)
 app.use('/groupHome', groupHomeRoutes)
 app.use('/orders', orderRoutes)
- 
+app.use('/placement', placementRoutes)
+
 app.listen(process.env.PORT, ()=>{
     console.log('Server is running, you better catch it!')
 })    
