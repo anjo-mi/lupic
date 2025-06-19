@@ -9,12 +9,16 @@
     <% if (orders.length){ %>
     <form action="placement/placeOrders" method="POST">
         <% orders.forEach(el => { %>
+        <% if (!el.placed){ %>
         <input type="checkbox" name="orderId" value="<%= el._id %>">
-        <label for="orderId">
-            <!-- populate users in order retrieval in getGroupOrders -->
-            <%= el.user.userName %>'s order</label>
+        <label for="orderId"><%= el.user.userName %>'s order</label>
+        <ul>
+            <li>Order:<p><%= el.order %></p></li>
+            <li>Notes:<p><%= el.notes %></p></li>
+        </ul>
+        <% } %>
         <% }) %>
-        <input type="submit" value="Mark These Orders As Placed">
+        <p><input type="submit" value="Mark These Orders As Placed"></p>
         <% if (!allOrdersSubmitted){ %>
         <p>Beware! Not All Group Members have submitted their orders yet!</p>
         <% } %>

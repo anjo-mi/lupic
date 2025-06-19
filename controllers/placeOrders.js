@@ -11,7 +11,8 @@ module.exports = {
                 populate: [
                     {path: 'selection'},
                     {path: 'selector'},
-                    {path: 'orders'},
+                    {path: 'orders',
+                     populate:'user',},
                     {path: 'members'},
                 ]
             });
@@ -19,7 +20,7 @@ module.exports = {
             const isSelector = req.user.id.toString() === user.group.selector._id.toString();
             let allOrdersSubmitted = false;
             if (orders.length === members.length) allOrdersSubmitted = true;
-            // console.log({isSelector, hasOrdered, selection, selector})
+            console.log({orders})
             res.render('placeOrders.ejs', {
                 orders,
                 selector,
