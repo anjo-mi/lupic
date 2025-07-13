@@ -103,7 +103,11 @@ module.exports = {
             ])
 
             console.log('new order submitted to group')
-            res.redirect('/orders')
+            if (req.body.isSelector){
+                res.redirect('/placement')
+            }else{
+                res.redirect('/orders')
+            }
         }catch(err){
             console.log(err)
         }
@@ -129,7 +133,11 @@ module.exports = {
             await User.findByIdAndUpdate(req.user.id, {order: order._id})
 
             console.log('users order id is updated')
-            res.redirect('/orders')
+            if (req.body.isSelector){
+                res.redirect('/placement')
+            }else{
+                res.redirect('/orders')
+            }
         }catch(err){
             console.log(err)
         }

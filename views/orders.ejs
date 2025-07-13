@@ -72,6 +72,7 @@
             <textarea name="userOrder" id="userOrder" rows="5" cols="40"></textarea>
             <textarea name="notes" id="notes" rows="5" cols="40"></textarea>
             <% if (selection){ %>
+            <input type="hidden" name="isSelector" value="<%= isSelector %>">
             <input type="submit">
             <% }else{ %>
             <p>Restaurant selection has not been submitted yet.</p>
@@ -85,6 +86,7 @@
             <textarea name="userOrderChanges" id="userOrder" rows="5" cols="40"></textarea>
             <textarea name="notesChanges" id="notes" rows="5" cols="40"></textarea>
             <% if (selection){ %>
+            <input type="hidden" name="isSelector" value="<%= isSelector %>">
             <input type="submit">
             <% }else{ %>
             <p>Restaurant selection has not been submitted yet.</p>
@@ -101,7 +103,7 @@
                 <input type="radio" name="newSelection" value="<%= el._id %>">
                 <label for="newSelection"><%= el.name %></label>
                 <ul>
-                    <li class="menu"><a href="<%= el.menu %>">Menu</a></li>
+                    <li class="menu"><a href="<%= el.menu %>" target="_blank">Menu</a></li>
                     <li class="phone">Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></li>
                     <li class="address">Address: <%= el.address %></li>
                 </ul>
