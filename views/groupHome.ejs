@@ -1,24 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        
+        
+        <!-- Incoming:
+        otherRests: [{Restaurants not in group}],
+        groupRestaurants: [{Restaurants in group}],
+        isAdmin: Boolean,
+        selection: {Restaurant} || null,
+        isSelector: Boolean,
+        orders: [{Orders}],
+        members: [{Users}]
+        order: {Order} || null
+    -->
 
-    <!-- Incoming:
-     otherRests: [{Restaurants not in group}],
-     groupRestaurants: [{Restaurants in group}],
-     isAdmin: Boolean,
-     selection: {Restaurant},
-     isSelector: Boolean,
-     orders: [{Orders}],
-     members: [{Users}]
-      -->
+
+    <!--  add a nav bar across pages, make sure each page only loads certain forms for admins and selector -->
+
+    <% if (selection !== null){ %>
+    <div class="selection-exists">
+    <% if (!orderedToday){ %>
+        <h2>Your group has selected a restaurant! Place your order <a href="/orders">HERE</a></h2>
+    <% }else{ %>
+        <h2>If you wish to change your order, you may do so <a href="/orders">HERE</a></h2>
+        <section class="current-order">
+            <h3><%= `${user.userName}'s current order for today:` %></h3>
+            <p><%= `Order: ${order.order}` %></p>
+            <p><%= `Notes: ${order.notes}` %></p>
+        </section>
+    </div>
+    <% } %>
+    <% } %>
 
     <div class="form-container">
         <div class="form-line" onclick="toggleForm(event)">
@@ -87,14 +106,8 @@
     </div>
 
 
-    <!--  add a nav bar across pages, make sure each page only loads certain forms for admins and selector -->
 
-    <!-- add a page with a form for the selector to mark orders as placed (add prop to Order Schema) (use button with event listener in public/_____.js file ) -->
-
-    <!-- add helper functions to choose random selector from members, clear selection, clear orders -->
-        <!-- would this work with a wrapper function that will have a null date, return the function that check if the date exists on the same day, if so set it to current date and do nothing, if not set it to current date and call setNewSelector.method(user.group.id) -->
-
-    
+        
     <div class="form-container">
         <div class="form-line" onclick="toggleForm(event)">
             <span>Add Existing Restaurant To Your Group!</span>

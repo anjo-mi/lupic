@@ -6,7 +6,8 @@ const Reset = require('../helpers/groupReset')
 module.exports = {
     getRestaurants: async (req,res)=>{
         try{
-            const user = await User.findById(req.user.id).populate({
+            const user = await User.findById(req.user.id).populate([
+                {
                 path: 'group',
                 populate: [
                     {path: 'selection'},
@@ -15,11 +16,14 @@ module.exports = {
                     {path: 'orders'},
                     {path: 'members'},
                 ]
-            })
+                },
+                {path: 'order'}
+        ])
             if (!user.group) return res.status(400).json({error: `User is not in a group!`})
             
             
             let {
+                order,
                 group: {
                     _id: groupId,
                     members,
@@ -51,6 +55,10 @@ module.exports = {
             const isAdmin = adminId === req.user.id;
             const isSelector = selector._id.toString() === user._id.toString();
 
+            // const order = await Order.findById(user.order)
+
+            const orderedToday = order.createdAt.toDateString() === new Date().toDateString();
+
             // check to make sure all orders are placed
             res.render('groupHome.ejs', {
                 otherRests,
@@ -60,6 +68,9 @@ module.exports = {
                 isSelector,
                 orders,
                 members,
+                orderedToday,
+                order,
+                user
             })
         }catch(err){
             console.log(err)

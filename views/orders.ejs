@@ -25,8 +25,8 @@
     <main class="order">
         <% if (hasOrdered){ %>
         <h3><%= `${user.userName}'s current order for today:` %></h3>
-        <p><%= `Order: ${history[history.length - 1].order}` %></p>
-        <p><%= `Notes: ${history[history.length - 1].notes}` %></p>
+        <p><%= `Order: ${history[0].order}` %></p>
+        <p><%= `Notes: ${history[0].notes}` %></p>
         <% } %>
     </main>
     <% if (selection){ %>
