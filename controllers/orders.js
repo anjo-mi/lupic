@@ -17,17 +17,13 @@ module.exports = {
             });
             let {restaurants = [], selection, selector, orders} = user.group || {};
             
-            
-            const allUserOrders = await Order.find({user:req.user.id})
+            const allUserOrders = await Order.find({user:req.user.id});
 
             let orderHistory;
-            // console.log({allUserOrders})
             if (allUserOrders.length && selection){
                 orderHistory = allUserOrders.filter(order => order.restaurant.toString() === selection._id.toString());
             }
             if (orderHistory.length) orderHistory = orderHistory.reverse();
-
-            // console.log({allUserOrders, selection})
 
             if (selection){
                 restaurants = restaurants.filter(rest => rest._id.toString() !== selection._id.toString())
@@ -41,8 +37,6 @@ module.exports = {
 
             const isSelector = req.user.id.toString() === selector._id.toString();
 
-
-            // console.log({isSelector, hasOrdered, selection, selector})
             res.render('orders.ejs', {
                 user,
                 hasOrdered,
@@ -58,20 +52,6 @@ module.exports = {
         }
     },
 
-    // this isnt real
-    addNewRestaurant: async (req, res)=>{
-        try{
-            const newRest = await Restaurant.create({name: req.body.restaurantName, menu: req.body.restaurantURL, phone: req.body.restaurantPhone, address: req.body.address})
-            await Group.findOneAndUpdate(
-                {_id: req.user.group},
-                {$addToSet:{restaurants: newRest._id}}
-            )
-            console.log('Restaurant has been added!')
-            res.redirect('/groupHome')
-        }catch(err){
-            console.log(err)
-        }
-    },
     changeRestaurant: async (req, res)=>{
         try{
             await Group.findByIdAndUpdate(
@@ -86,7 +66,6 @@ module.exports = {
     },
     submitOrder: async (req,res) =>{
         try{
-            console.log('running order submission')
             const user = await User.findById(req.user.id).populate('group')
 
             const order = await Order.create({
@@ -103,7 +82,6 @@ module.exports = {
             ])
 
             console.log('new order submitted to group')
-            console.log(req.body)
             if (req.body.isSelector === 'true'){
                 res.redirect('/placement')
             }else{
@@ -115,7 +93,6 @@ module.exports = {
     },
     changeOrder: async (req,res) =>{
         try{
-            console.log('running order change')
             const user = await User.findById(req.user.id).populate('group')
 
             const order = await Order.create({
@@ -126,10 +103,8 @@ module.exports = {
                 notes: req.body.notesChanges,
                 createdAt: Date.now()
             })
-            console.log('new order made')
             await Group.findByIdAndUpdate(user.group._id, {$pull: {orders: user.order}})
             await Group.findByIdAndUpdate(user.group._id, {$addToSet: {orders: order._id}})
-            console.log('new order added to group, old removed')
 
             await User.findByIdAndUpdate(req.user.id, {order: order._id})
 
@@ -143,27 +118,4 @@ module.exports = {
             console.log(err)
         }
     },
-    // this isnt real
-    unmarkSelection: async (req, res)=>{
-        try{
-            await Restaurant.findOneAndUpdate({_id:req.body.todoIdFromJSFile},{
-                completed: false
-            })
-            console.log('Marked Incomplete')
-            res.json('Marked Incomplete')
-        }catch(err){
-            console.log(err)
-        }
-    },
-    // this isnt real
-    deleteRestaurant: async (req, res)=>{
-        console.log(req.body.todoIdFromJSFile)
-        try{
-            await Restaurant.findOneAndDelete({_id:req.body.todoIdFromJSFile})
-            console.log('Deleted Restaurant')
-            res.json('Deleted It')
-        }catch(err){
-            console.log(err)
-        }
-    }
 }  

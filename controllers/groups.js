@@ -3,7 +3,6 @@ const User = require('../models/User')
 
 module.exports = {
     getGroups: async (req,res)=>{
-        console.log(req.user)
         try{
             const user = await User.findById(req.user.id);
             const allGroups = await Group.find()
@@ -15,7 +14,6 @@ module.exports = {
             console.log(err)
         }
     },
-    // PROCEED WITH CAUTION: THIS METHOD ALSO ADDS GROUPID TO USER INSTANCE
     createGroup: async (req, res)=>{
         try{
             const group = await Group.create({
@@ -37,7 +35,6 @@ module.exports = {
             console.log(err)
         }
     },
-    // PROCEED WITH CAUTION: THIS METHOD ALSO ADDS GROUPID TO USER INSTANCE
     joinGroup: async (req, res)=>{
         try{
             const updatedGroup = await Group.findOneAndUpdate(
@@ -70,15 +67,4 @@ module.exports = {
             console.log(err)
         }
     },
-    deleteGroup: async (req, res)=>{
-        console.log(req.body.groupId)
-        try{
-            const deleted = await Group.findOneAndDelete({_id:req.body.groupId, adminId: req.user.id})
-            if (!deleted) return res.status(403).json(`you are not an admin of this group, or this group no longer exists`)
-            console.log('Deleted Group')
-            res.json('Group Removed')
-        }catch(err){
-            console.log(err)
-        }
-    }
 }   

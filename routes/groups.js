@@ -9,8 +9,6 @@ router.post('/createGroup', groupController.createGroup)
 
 router.post('/joinGroup', groupController.joinGroup)
 
-// router.put('/markIncomplete', todosController.markIncomplete)
-
-// router.delete('/deleteTodo', todosController.deleteTodo)
+router.post('/removeMember', groupController.removeMember)
 
 module.exports = router

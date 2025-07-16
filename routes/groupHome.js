@@ -13,9 +13,4 @@ router.post('/submitChoice', groupHomeController.submitChoice)
 
 router.post('/deleteRest', groupHomeController.deleteRestaurant)
 
-// router.delete('/deleteTodo', todosController.deleteTodo)
-
 module.exports = router
-
-
-// add handlers for submitting restaurant as selection and clearing the selection after adding selection to schema

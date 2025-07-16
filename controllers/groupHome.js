@@ -55,11 +55,8 @@ module.exports = {
             const isAdmin = adminId === req.user.id;
             const isSelector = selector._id.toString() === user._id.toString();
 
-            // const order = await Order.findById(user.order)
-
             const orderedToday = order.createdAt.toDateString() === new Date().toDateString();
 
-            // check to make sure all orders are placed
             res.render('groupHome.ejs', {
                 otherRests,
                 groupRestaurants,
@@ -95,7 +92,7 @@ module.exports = {
                 {_id:req.user.group},
                 {$addToSet: {restaurants: req.body.restId}}
             )
-            console.log('Marked Complete')
+            console.log('Pre-existing Restaurant Added to Group')
             res.redirect('/groupHome')
         }catch(err){
             console.log(err)
@@ -113,13 +110,7 @@ module.exports = {
             console.log(err)
         }
     },
-    // TODO: add selection to Group Schema
-    //       add selector  to Group Schema
-    //      ?add isSelector to User Schema?
-    //      ?helpers folder for clearing data?
-
-    // make order schema / order controller / order.ejs to display / change / delete order
-
+    
     deleteRestaurant: async (req, res)=>{
         try{
             const user = await User.findById(req.user.id);

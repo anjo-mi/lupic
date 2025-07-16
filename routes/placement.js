@@ -7,12 +7,4 @@ router.get('/', ensureAuth, placementController.getGroupOrders)
 
 router.post('/placeOrders', placementController.placeOrders)
 
-// router.post('/addExistingRestaurant', groupHomeController.addExistingRestaurant)
-
-// router.post('/submitChoice', groupHomeController.submitChoice)
-
-// router.post('/deleteRest', groupHomeController.deleteRestaurant)
-
-// router.delete('/deleteTodo', todosController.deleteTodo)
-
 module.exports = router
