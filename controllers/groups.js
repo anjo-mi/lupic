@@ -1,15 +1,47 @@
 const Group = require('../models/Group')
+const Order = require('../models/Order')
 const User = require('../models/User')
 
 module.exports = {
     getGroups: async (req,res)=>{
         try{
-            const user = await User.findById(req.user.id);
-            const allGroups = await Group.find()
-            if (!user.group){
-                res.render('groups.ejs', {groups: allGroups, user: req.user})
-            }
-            res.redirect('/groupHome')
+            const user = await User.findById(req.user.id).populate([
+                {
+                    path: 'group',
+                    populate: [
+                        {path: 'selection'},
+                        {path: 'selector'},
+                        {path: 'restaurants'},
+                    ]
+                },
+                {path: 'order'}
+            ])
+            const allGroups = await Group.find();
+            
+            const {
+                group: {
+                    selection,
+                    selector,
+                    restaurants
+                },
+                order
+            } = user;
+
+            const orderedToday = order.createdAt.toDateString() === new Date().toDateString()
+            const isSelector = selector._id.toString() === user._id.toString();
+            const group = user.group || null;
+
+            res.render('groups.ejs', {
+                groups: allGroups,
+                user,
+                selection: selection || null,
+                restaurants,
+                isSelector,
+                group,
+                order,
+                orderedToday,
+                selector
+            });
         }catch(err){
             console.log(err)
         }
