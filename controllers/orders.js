@@ -22,8 +22,8 @@ module.exports = {
             let orderHistory;
             if (allUserOrders.length && selection){
                 orderHistory = allUserOrders.filter(order => order.restaurant.toString() === selection._id.toString());
+                if (orderHistory.length) orderHistory = orderHistory.reverse();
             }
-            if (orderHistory.length) orderHistory = orderHistory.reverse();
 
             if (selection){
                 restaurants = restaurants.filter(rest => rest._id.toString() !== selection._id.toString())

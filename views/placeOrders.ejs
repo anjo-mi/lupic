@@ -6,6 +6,15 @@
     <title>Document</title>
 </head>
 <body>
+    <nav class="nav">
+        <ul>
+            <li><a href="/groups">Home</a></li>
+            <li><a href="/groupHome">Group</a></li>
+            <li><a href="/orders">Your Order</a></li>
+            <li><a href="/placement">Place Group Order</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
     <% if (orders.length){ %>
     <form action="placement/placeOrders" method="POST">
         <% orders.forEach(el => { %>
@@ -23,6 +32,10 @@
         <p>Beware! Not All Group Members have submitted their orders yet!</p>
         <% } %>
     </form>
+    <% }else if(!selection){ %>
+    <p><%= isSelector ? 'You have' : `${selector.userName} has` %> not selected a restaurant yet.</p>
+    <% }else{ %>
+    <p>No Orders have been submitted yet</p>
     <% } %>
 </body>
 </html>

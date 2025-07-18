@@ -6,11 +6,21 @@
     <title>Document</title>
 </head>
 <body>
+
+    <nav class="nav">
+        <ul>
+            <li><a href="/groups">Home</a></li>
+            <li><a href="/groupHome">Group</a></li>
+            <li><a href="/orders">Your Order</a></li>
+            <li><a href="/placement">Place Group Order</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
         
     <% if (selection){ %>
     <h1><%= selector.userName + "'s" %> choice today was <%= selection.name %></h1>
     <% }else{ %>
-    <h1><%= selector.userName %> has not made a selection yet!</h1>
+    <h1><%= selector.userName === user.userName ? `You have` : `${selector.userName} has` %> not made a selection yet!</h1>
     <% } %>
     
     <main class="order">

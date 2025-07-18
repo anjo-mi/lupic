@@ -23,6 +23,15 @@
     }
     -->
 
+    <nav class="nav">
+        <ul>
+            <li><a href="/groups">Home</a></li>
+            <li><a href="/groupHome">Group</a></li>
+            <li><a href="/orders">Your Order</a></li>
+            <li><a href="/placement">Place Group Order</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
     
     <% if (selection){ %>
     <h2><%= selection.name %> is <%= selector.userName %>'s choice today!</h2>
@@ -91,7 +100,7 @@
             <div class="form-content">
                 <div class="form-inner">
                     <form action="/groupHome/submitChoice" method="POST">
-                        <% groupRestaurants.forEach(el => { %>
+                        <% restaurants.forEach(el => { %>
                         <div class="form-group">
                             <input type="radio" name="restId" value="<%=el._id%>" id="<%=el._id%>">
                             <label for="<%=el._id%>"><%=el.name%></label>
@@ -102,8 +111,8 @@
                             </ul>
                         </div>
                         <% }) %>
-                        <% if (!groupRestaurants.length){ %>
-                        <p>No restaurants exist. Add existing or new ones below.</p>
+                        <% if (restaurants.length){ %>
+                        <p>No restaurants exist in the group. Add one in <a href="/groupHome">your group home page</a></p>
                         <% } %>
                         <% if (isSelector){ %>
                         <button type="submit" class="submit-btn">Submit Choice</button>
