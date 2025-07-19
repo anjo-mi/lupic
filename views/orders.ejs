@@ -44,7 +44,6 @@
             <div class="order-history">
             <h4>Previous Orders from <%= selection.name %></h4>
             <% if (hasOrdered) history = history.slice(0,-1) %>
-            <!-- <form action="/orders/submitPrevOrder" method="POST"></form> -->
             <% history.forEach(el => { %>
             <div class="prev-order-group">
                  <input type="hidden" id="hasOrdered" value="<%= hasOrdered %>">
@@ -95,6 +94,36 @@
         </fieldset>
     </form>
     <% } %>
+    <% if (!selection && isSelector){ %>
+    <div class="form-container">
+        <div class="form-line" onclick="toggleForm(event)">
+            <span>Submit today's restaurant!</span>
+            <span class="expand-icon">▼</span>
+        </div>
+        
+        <div class="form-content">
+            <div class="form-inner">
+                <form action="/groupHome/submitChoice" method="POST">
+                    <% restaurants.forEach(el => { %>
+                    <div class="form-group">
+                        <input type="radio" name="restId" value="<%=el._id%>" id="<%=el._id%>">
+                        <label for="<%=el._id%>"><%=el.name%></label>
+                        <ul>
+                            <li><p><a href="<%= el.menu %>" target="_blank">Menu</a></p></li>
+                            <li><p>Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></p></li>
+                            <li><p>Address: <%= el.address %></p></li>
+                        </ul>
+                    </div>
+                    <% }) %>
+                    <% if (!restaurants.length){ %>
+                    <p>No restaurants exist. Add existing or new ones below.</p>
+                    <% } %>
+                    <button type="submit" class="submit-btn">Submit Choice</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <% }else if (isSelector){ %>
     <form action="/orders/changeRestaurant" method="POST">
         <fieldset>
             <legend>Change Today's Selection</legend>
@@ -110,14 +139,11 @@
                 </ul>
                 <% }) %>
             </div>
-            <% if (isSelector){ %>
             <input type="hidden" name="groupId" value="<%= user.group._id %>">
             <input type="submit">
-            <% }else{ %>
-            <p>It's not your turn to make the selection today.</p>
-            <% } %>
         </fieldset>
     </form>
+    <% } %>
     
     <script src="js/main.js"></script>
 </body>

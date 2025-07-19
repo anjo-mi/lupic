@@ -30,10 +30,11 @@ module.exports = {
             }
             let lastOrderDateString;
             if (allUserOrders.length){
-                lastOrderDateString = allUserOrders[allUserOrders.length - 1].createdAt.toDateString();
+                lastOrderDateString = orderHistory[0].createdAt.toDateString();
             }
 
             let hasOrdered = new Date().toDateString() === lastOrderDateString;
+            console.log({hasOrdered, lastOrderDateString})
 
             const isSelector = req.user.id.toString() === selector._id.toString();
 
@@ -82,6 +83,33 @@ module.exports = {
             ])
 
             console.log('new order submitted to group')
+            if (req.body.isSelector === 'true'){
+                res.redirect('/placement')
+            }else{
+                res.redirect('/orders')
+            }
+        }catch(err){
+            console.log(err)
+        }
+    },
+    resubmitOrder: async(req,res) => {
+        try{
+            const user = await User.findById(req.user.id).populate('group')
+
+            const order = await Order.create({
+                user: user._id,
+                group: user.group._id,
+                restaurant: user.group.selection,
+                order: req.body.userOrderChanges,
+                notes: req.body.notesChanges,
+                createdAt: Date.now()
+            })
+            await Group.findByIdAndUpdate(user.group._id, {$pull: {orders: user.order}})
+            await Group.findByIdAndUpdate(user.group._id, {$addToSet: {orders: order._id}})
+
+            await User.findByIdAndUpdate(req.user.id, {order: order._id})
+
+            console.log('users order id is updated')
             if (req.body.isSelector === 'true'){
                 res.redirect('/placement')
             }else{

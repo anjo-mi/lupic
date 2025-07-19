@@ -7,6 +7,8 @@ router.get('/', ensureAuth, orderController.getOrders)
 
 router.post('/submitOrder', orderController.submitOrder)
 
+router.post('/resubmitOrder', orderController.resubmitOrder)
+
 router.post('/changeOrder', orderController.changeOrder)
 
 router.post('/changeRestaurant', orderController.changeRestaurant)

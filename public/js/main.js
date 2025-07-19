@@ -14,7 +14,7 @@ async function submitOldOrder(){
     const hasOrdered = this.parentNode.querySelector('#hasOrdered').value;
     try{
         if (hasOrdered){
-            const response = await fetch('orders/changeOrder', {
+            const response = await fetch('orders/resubmitOrder', {
                 method: 'post',
                 headers: {'Content-type': 'application/json'},
                 body: JSON.stringify({
@@ -24,7 +24,8 @@ async function submitOldOrder(){
             })
             location.reload()
         }else{
-            const response = await fetch('orders/submitOrder', {
+            console.log('resubmitting order')
+            const response = await fetch('orders/resubmitOrder', {
                 method: 'post',
                 headers: {'Content-type': 'application/json'},
                 body: JSON.stringify({

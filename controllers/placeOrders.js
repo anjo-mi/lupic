@@ -12,7 +12,7 @@ module.exports = {
                     {path: 'selection'},
                     {path: 'selector'},
                     {path: 'orders',
-                     populate:'user',},
+                     populate:'user'},
                     {path: 'members'},
                 ]
             });
