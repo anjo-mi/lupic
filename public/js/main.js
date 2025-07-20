@@ -8,7 +8,6 @@ Array.from(resubmitOrder).forEach((el)=>{
 })
 
 async function submitOldOrder(){
-    const todoId = this.parentNode.dataset.id
     const oldOrder = this.parentNode.querySelector('.prev-order p').textContent;
     const oldNotes = this.parentNode.querySelector('.prev-notes p').textContent;
     const hasOrdered = this.parentNode.querySelector('#hasOrdered').value;

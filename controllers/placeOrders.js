@@ -43,9 +43,13 @@ module.exports = {
                 )
             })
 
+            const group = await Group.findById(user.group).populate('orders');
+            const unordered = group.orders.filter(order => !order.placed && order.createdAt.toDateString() === new Date().toDateString());
+            const remainingOrders = unordered.length > 0;
+            console.log(group.orders, {unordered, remainingOrders})
             console.log('The marked orders have been placed!')
-            // maybe change this to placeOrders???
-            res.redirect('/groupHome')
+            if (remainingOrders) res.redirect('/placement')
+            else res.redirect('/groups')
         }catch(err){
             console.log(err)
         }

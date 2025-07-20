@@ -30,8 +30,9 @@ const User = require('../models/User')
       }
       req.logIn(user, (err) => {
         if (err) { return next(err) }
+        console.log({user}, 'user in auth controller that just logged in and is awaiting direction!')
         req.flash('success', { msg: 'Success! You are logged in.' })
-        res.redirect(req.session.returnTo || '/groupHome')
+        res.redirect(req.session.returnTo || (user.group ? '/groupHome' : '/groups'))
       })
     })(req, res, next)
   }
@@ -49,7 +50,7 @@ const User = require('../models/User')
   
   exports.getSignup = (req, res) => {
     if (req.user) {
-      return res.redirect('/todos')
+      return res.redirect('/groups')
     }
     res.render('signup', {
       title: 'Create Account'
