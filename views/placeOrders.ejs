@@ -27,7 +27,11 @@
         </ul>
         <% } %>
         <% }) %>
+        <% if (isSelector){ %>
         <p><input type="submit" value="Mark These Orders As Placed"></p>
+        <% } else{ %>
+        <p>You may not submit orders today, as you were not the selector!</p>
+        <% } %>
         <% if (!allOrdersSubmitted){ %>
         <p>Beware! Not All Group Members have submitted their orders yet!</p>
         <% } %>

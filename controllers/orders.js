@@ -16,6 +16,11 @@ module.exports = {
                 ]
             });
             let {restaurants = [], selection, selector, orders} = user.group || {};
+
+            let ordersAlreadyPlaced = false;
+            if (orders.find(order => order.createdAt.toDateString() === new Date().toDateString())){
+                ordersAlreadyPlaced = true;
+            }
             
             const allUserOrders = await Order.find({user:req.user.id});
 
@@ -46,7 +51,8 @@ module.exports = {
                 restaurants,
                 selection,
                 selector,
-                orders
+                orders,
+                ordersAlreadyPlaced
             })
         }catch(err){
             console.log(err)
@@ -55,12 +61,20 @@ module.exports = {
 
     changeRestaurant: async (req, res)=>{
         try{
+            const group = await Group.findById(req.body.groupId).populate('orders');
+            const orders = group.orders
+
+            console.log({group, orders})
+            if (orders.find(order => order.createdAt.toDateString() === new Date().toDateString())){
+                return res.redirect('/orders')
+            }
+
             await Group.findByIdAndUpdate(
                 req.body.groupId,
                 {$set: {selection: req.body.newSelection}}
             )
             console.log('new selection made')
-            res.redirect('/orders')
+            return res.redirect('/orders')
         }catch(err){
             console.log(err)
         }
@@ -84,9 +98,9 @@ module.exports = {
 
             console.log('new order submitted to group')
             if (req.body.isSelector === 'true'){
-                res.redirect('/placement')
+                return res.redirect('/placement')
             }else{
-                res.redirect('/orders')
+                return res.redirect('/orders')
             }
         }catch(err){
             console.log(err)
@@ -111,9 +125,9 @@ module.exports = {
 
             console.log('users order id is updated')
             if (req.body.isSelector === 'true'){
-                res.redirect('/placement')
+                return res.redirect('/placement')
             }else{
-                res.redirect('/orders')
+                return res.redirect('/orders')
             }
         }catch(err){
             console.log(err)
@@ -138,9 +152,9 @@ module.exports = {
 
             console.log('users order id is updated')
             if (req.body.isSelector === 'true'){
-                res.redirect('/placement')
+                return res.redirect('/placement')
             }else{
-                res.redirect('/orders')
+                return res.redirect('/orders')
             }
         }catch(err){
             console.log(err)

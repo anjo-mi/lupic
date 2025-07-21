@@ -17,6 +17,9 @@
         </ul>
     </nav>
         
+    <% if (ordersAlreadyPlaced){ %>
+        <p>You have already received orders for your choice. You may no longer change your selection.</p>
+    <% } %>
     <% if (selection){ %>
     <h1><%= selector.userName + "'s" %> choice today was <%= selection.name %></h1>
     <% }else{ %>
