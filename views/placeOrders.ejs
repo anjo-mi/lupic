@@ -15,31 +15,31 @@
             <li><a href="/logout">Logout</a></li>
         </ul>
     </nav>
-    <% if (orders.length){ %>
+<% if (orders.length){ %>
     <form action="placement/placeOrders" method="POST">
-        <% orders.forEach(el => { %>
-        <% if (!el.placed){ %>
+    <% orders.forEach(el => { %>
+    <% if (!el.placed){ %>
         <input type="checkbox" name="orderId" value="<%= el._id %>">
         <label for="orderId"><%= el.user.userName %>'s order</label>
         <ul>
             <li>Order:<p><%= el.order %></p></li>
             <li>Notes:<p><%= el.notes %></p></li>
         </ul>
-        <% } %>
-        <% }) %>
-        <% if (isSelector){ %>
-        <p><input type="submit" value="Mark These Orders As Placed"></p>
-        <% } else{ %>
-        <p>You may not submit orders today, as you were not the selector!</p>
-        <% } %>
-        <% if (!allOrdersSubmitted){ %>
-        <p>Beware! Not All Group Members have submitted their orders yet!</p>
-        <% } %>
-    </form>
-    <% }else if(!selection){ %>
-    <p><%= isSelector ? 'You have' : `${selector.userName} has` %> not selected a restaurant yet.</p>
-    <% }else{ %>
-    <p>No Orders have been submitted yet</p>
     <% } %>
+    <% }) %>
+    <% if (isSelector){ %>
+        <p><input type="submit" value="Mark These Orders As Placed"></p>
+    <% } else{ %>
+        <p>You may not submit orders today, as you were not the selector!</p>
+    <% } %>
+    <% if (!allOrdersSubmitted){ %>
+        <p>Beware! Not All Group Members have submitted their orders yet!</p>
+    <% } %>
+    </form>
+<% }else if(!selection){ %>
+    <p><%= isSelector ? 'You have' : `${selector.userName} has` %> not selected a restaurant yet.</p>
+<% }else{ %>
+    <p>No Orders have been submitted yet</p>
+<% } %>
 </body>
 </html>

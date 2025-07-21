@@ -27,27 +27,25 @@
     <% } %>
     
     <main class="order">
-        <% if (hasOrdered){ %>
+    <% if (hasOrdered){ %>
         <h3><%= `${user.userName}'s current order for today:` %></h3>
         <p><%= `Order: ${history[0].order}` %></p>
         <p><%= `Notes: ${history[0].notes}` %></p>
-        <% } %>
+    <% } %>
     </main>
-    <% if (selection){ %>
-    <h3>
-        View the <%= selection.name %> Details
-    </h3>
+<% if (selection){ %>
+    <h3>View the <%= selection.name %> Details</h3>
     <div class="selection-details">
         <ul>
             <li class="menu"><a href="<%= selection.menu %>">Menu</a></li>
             <li class="phone">Phone: <%= `${selection.phone.slice(0,3)}-${selection.phone.slice(3,6)}-${selection.phone.slice(7)}` %></li>
             <li class="address">Address: <%= selection.address %></li>
         </ul>
-        <% if (history.length){ %>
+    <% if (history.length){ %>
             <div class="order-history">
             <h4>Previous Orders from <%= selection.name %></h4>
-            <% if (hasOrdered) history = history.slice(0,-1) %>
-            <% history.forEach(el => { %>
+        <% if (hasOrdered) history = history.slice(0,-1) %>
+        <% history.forEach(el => { %>
             <div class="prev-order-group">
                  <input type="hidden" id="hasOrdered" value="<%= hasOrdered %>">
                 <ul>
@@ -63,41 +61,41 @@
                 </ul>
                 <button class="resubmit-order">Submit This Order Again</button>
             </div>
-            <% }) %>
+        <% }) %>
         </div>
-        <%}%>
+    <%}%>
     </div>
-    <% } %>
-    <% if (!hasOrdered){ %>
+<% } %>
+<% if (!hasOrdered){ %>
     <form action="/orders/submitOrder" method="POST">
         <fieldset>
             <legend>Place Your Order here</legend>
             <textarea name="userOrder" id="userOrder" rows="5" cols="40"></textarea>
             <textarea name="notes" id="notes" rows="5" cols="40"></textarea>
-            <% if (selection){ %>
+        <% if (selection){ %>
             <input type="hidden" name="isSelector" value="<%= isSelector %>">
             <input type="submit">
-            <% }else{ %>
+        <% }else{ %>
             <p>Restaurant selection has not been submitted yet.</p>
-            <% } %>
+        <% } %>
         </fieldset>
     </form>
-    <% }else{ %>
+<% }else{ %>
     <form action="/orders/changeOrder" method="POST">
         <fieldset>
             <legend>Change Your Order here</legend>
             <textarea name="userOrderChanges" id="userOrder" rows="5" cols="40"></textarea>
             <textarea name="notesChanges" id="notes" rows="5" cols="40"></textarea>
-            <% if (selection){ %>
+        <% if (selection){ %>
             <input type="hidden" name="isSelector" value="<%= isSelector %>">
             <input type="submit">
-            <% }else{ %>
+        <% }else{ %>
             <p>Restaurant selection has not been submitted yet.</p>
-            <% } %>
+        <% } %>
         </fieldset>
     </form>
-    <% } %>
-    <% if (!selection && isSelector){ %>
+<% } %>
+<% if (!selection && isSelector){ %>
     <div class="form-container">
         <div class="form-line" onclick="toggleForm(event)">
             <span>Submit today's restaurant!</span>
@@ -107,7 +105,7 @@
         <div class="form-content">
             <div class="form-inner">
                 <form action="/groupHome/submitChoice" method="POST">
-                    <% restaurants.forEach(el => { %>
+                <% restaurants.forEach(el => { %>
                     <div class="form-group">
                         <input type="radio" name="restId" value="<%=el._id%>" id="<%=el._id%>">
                         <label for="<%=el._id%>"><%=el.name%></label>
@@ -117,22 +115,22 @@
                             <li><p>Address: <%= el.address %></p></li>
                         </ul>
                     </div>
-                    <% }) %>
-                    <% if (!restaurants.length){ %>
+                <% }) %>
+                <% if (!restaurants.length){ %>
                     <p>No restaurants exist. Add existing or new ones below.</p>
-                    <% } %>
+                <% } %>
                     <button type="submit" class="submit-btn">Submit Choice</button>
                 </form>
             </div>
         </div>
     </div>
-    <% }else if (isSelector){ %>
+<% }else if (isSelector){ %>
     <form action="/orders/changeRestaurant" method="POST">
         <fieldset>
             <legend>Change Today's Selection</legend>
             <div class="form-carousel">
-                <%  %>
-                <% restaurants.forEach(el => { %>
+            <%  %>
+            <% restaurants.forEach(el => { %>
                 <input type="radio" name="newSelection" value="<%= el._id %>">
                 <label for="newSelection"><%= el.name %></label>
                 <ul>
@@ -140,13 +138,13 @@
                     <li class="phone">Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></li>
                     <li class="address">Address: <%= el.address %></li>
                 </ul>
-                <% }) %>
+            <% }) %>
             </div>
             <input type="hidden" name="groupId" value="<%= user.group._id %>">
             <input type="submit">
         </fieldset>
     </form>
-    <% } %>
+<% } %>
     
     <script src="js/main.js"></script>
 </body>
