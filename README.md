@@ -1,6 +1,6 @@
 # PiKwik 🍕
 
-**Group Food Ordering Made Simple**
+**Making a Picnic Out of Picking**
 
 PiKwik is a collaborative food ordering application built with Node.js and Express. It allows groups to coordinate restaurant selections, place individual orders, and manage group food orders efficiently.
 
@@ -29,7 +29,7 @@ PiKwik streamlines the group food ordering process by providing:
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone <https://github.com/anjo-mi/lupic>
    cd pikwik
    ```
 
@@ -191,25 +191,7 @@ PiKwik streamlines the group food ordering process by providing:
 - **API Documentation** - Swagger/OpenAPI documentation
 - **Testing Suite** - Comprehensive unit and integration tests
 
----
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
-**Built with ❤️ for seamless group food ordering**
 
 
 
