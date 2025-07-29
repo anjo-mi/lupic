@@ -1,0 +1,48 @@
+/* Index page specific styles */
+.landing-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    text-align: center;
+    gap: 2rem;
+}
+
+.landing-links {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.landing-links a {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.9);
+    color: #667eea;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.landing-links a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    color: #764ba2;
+    text-decoration: none;
+}
+
+@media (max-width: 480px) {
+    .landing-links {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .landing-links a {
+        padding: 0.75rem 1.5rem;
+    }
+}

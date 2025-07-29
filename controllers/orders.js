@@ -34,7 +34,7 @@ module.exports = {
                 restaurants = restaurants.filter(rest => rest._id.toString() !== selection._id.toString())
             }
             let lastOrderDateString;
-            if (allUserOrders.length){
+            if (allUserOrders.length && orderHistory){
                 lastOrderDateString = orderHistory[0].createdAt.toDateString();
             }
 
@@ -42,6 +42,8 @@ module.exports = {
             console.log({hasOrdered, lastOrderDateString})
 
             const isSelector = req.user.id.toString() === selector._id.toString();
+
+            console.log({restaurants})
 
             res.render('orders.ejs', {
                 user,

@@ -3,9 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Place Group Orders - PiKwik</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/placeOrders.css">
 </head>
 <body>
+    <div class="app-header">
+        <h1 class="app-title">PiKwik</h1>
+        <p class="app-subtitle">Group Food Ordering Made Simple</p>
+    </div>
+
     <nav class="nav">
         <ul>
             <li><a href="/groups">Home</a></li>
@@ -15,31 +22,75 @@
             <li><a href="/logout">Logout</a></li>
         </ul>
     </nav>
-<% if (orders.length){ %>
-    <form action="placement/placeOrders" method="POST">
-    <% orders.forEach(el => { %>
-    <% if (!el.placed){ %>
-        <input type="checkbox" name="orderId" value="<%= el._id %>">
-        <label for="orderId"><%= el.user.userName %>'s order</label>
-        <ul>
-            <li>Order:<p><%= el.order %></p></li>
-            <li>Notes:<p><%= el.notes %></p></li>
-        </ul>
+
+    <% if (orders.length){ %>
+        <div class="orders-overview">
+            <h2>Group Orders Ready for Placement</h2>
+            <p>Review and select orders to place with the restaurant</p>
+        </div>
+
+        <div class="form-container">
+            <div class="form-line" onclick="toggleForm(event)">
+                <span>Select Orders to Place</span>
+                <span class="expand-icon">▼</span>
+            </div>
+            
+            <div class="form-content">
+                <div class="form-inner">
+                    <form action="placement/placeOrders" method="POST" class="placement-form">
+                        <div class="carousel-container orders-carousel">
+                            <div class="carousel-track" id="ordersTrack">
+                                <% orders.forEach((el, index) => { %>
+                                <% if (!el.placed){ %>
+                                <div class="carousel-item">
+                                    <div class="order-item">
+                                        <label for="order_<%=index%>">
+                                            <input type="checkbox" name="orderId" value="<%= el._id %>" id="order_<%=index%>">
+                                            <%= el.user.userName %>'s order
+                                        </label>
+                                        <div class="order-details">
+                                            <ul>
+                                                <li>Order: <p><%= el.order %></p></li>
+                                                <li>Notes: <p><%= el.notes %></p></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                                <% }) %>
+                            </div>
+                            <div class="carousel-controls">
+                                <button type="button" class="carousel-btn" onclick="prevSlide('ordersTrack')">← Prev</button>
+                                <div class="carousel-pagination" id="ordersPagination"></div>
+                                <button type="button" class="carousel-btn" onclick="nextSlide('ordersTrack')">Next →</button>
+                            </div>
+                        </div>
+
+                        <% if (isSelector){ %>
+                            <input type="submit" value="Mark These Orders As Placed">
+                        <% } else{ %>
+                            <p class="permission-message">You may not submit orders today, as you were not the selector!</p>
+                        <% } %>
+
+                        <% if (!allOrdersSubmitted){ %>
+                            <div class="status-message warning">
+                                <p>Beware! Not All Group Members have submitted their orders yet!</p>
+                            </div>
+                        <% } %>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <% }else if(!selection){ %>
+        <div class="status-message info">
+            <p><%= isSelector ? 'You have' : `${selector.userName} has` %> not selected a restaurant yet.</p>
+        </div>
+    <% }else{ %>
+        <div class="status-message info">
+            <p>No Orders have been submitted yet</p>
+        </div>
     <% } %>
-    <% }) %>
-    <% if (isSelector){ %>
-        <p><input type="submit" value="Mark These Orders As Placed"></p>
-    <% } else{ %>
-        <p>You may not submit orders today, as you were not the selector!</p>
-    <% } %>
-    <% if (!allOrdersSubmitted){ %>
-        <p>Beware! Not All Group Members have submitted their orders yet!</p>
-    <% } %>
-    </form>
-<% }else if(!selection){ %>
-    <p><%= isSelector ? 'You have' : `${selector.userName} has` %> not selected a restaurant yet.</p>
-<% }else{ %>
-    <p>No Orders have been submitted yet</p>
-<% } %>
+
+    <script src="js/main.js"></script>
 </body>
 </html>

@@ -39,16 +39,176 @@ async function submitOldOrder(){
     }
 }
 
+// Dropdown form functionality
 function toggleForm(event) {
-            const container = event.target.closest('.form-container');
-            container.classList.toggle('expanded');
+    const formContainer = event.currentTarget.parentElement;
+    const allContainers = document.querySelectorAll('.form-container');
+    
+    // Close all other forms
+    allContainers.forEach(container => {
+        if (container !== formContainer && container.classList.contains('expanded')) {
+            container.classList.remove('expanded');
         }
+    });
+    
+    // Toggle current form
+    formContainer.classList.toggle('expanded');
+}
 
-document.addEventListener('click', function(event) {
-            const containers = document.querySelectorAll('.form-container');
-            containers.forEach(container => {
-                if (!container.contains(event.target) && container.classList.contains('expanded')) {
-                    container.classList.remove('expanded');
-                }
-            });
+// Carousel functionality
+const carousels = {};
+
+function initCarousel(trackId) {
+    const track = document.getElementById(trackId);
+    if (!track) return;
+    
+    const items = track.querySelectorAll('.carousel-item');
+    const paginationContainer = document.getElementById(trackId.replace('Track', 'Pagination'));
+    
+    if (items.length === 0) return;
+    
+    carousels[trackId] = {
+        currentIndex: 0,
+        totalItems: items.length,
+        track: track,
+        items: items
+    };
+    
+    // Create pagination dots
+    if (paginationContainer) {
+        paginationContainer.innerHTML = '';
+        for (let i = 0; i < items.length; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'carousel-dot';
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(trackId, i));
+            paginationContainer.appendChild(dot);
+        }
+    }
+    
+    updateCarousel(trackId);
+}
+
+function updateCarousel(trackId) {
+    const carousel = carousels[trackId];
+    if (!carousel) return;
+    
+    // Ensure currentIndex is within bounds
+    carousel.currentIndex = Math.max(0, Math.min(carousel.currentIndex, carousel.totalItems - 1));
+    
+    const translateX = -carousel.currentIndex * 100;
+    carousel.track.style.transform = `translateX(${translateX}%)`;
+    
+    // Update pagination
+    const paginationContainer = document.getElementById(trackId.replace('Track', 'Pagination'));
+    if (paginationContainer) {
+        const dots = paginationContainer.querySelectorAll('.carousel-dot');
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === carousel.currentIndex);
         });
+    }
+}
+
+function nextSlide(trackId) {
+    const carousel = carousels[trackId];
+    if (!carousel) return;
+    
+    if (carousel.currentIndex < carousel.totalItems - 1) {
+        carousel.currentIndex++;
+    } else {
+        carousel.currentIndex = 0; // Loop back to first
+    }
+    updateCarousel(trackId);
+}
+
+function prevSlide(trackId) {
+    const carousel = carousels[trackId];
+    if (!carousel) return;
+    
+    if (carousel.currentIndex > 0) {
+        carousel.currentIndex--;
+    } else {
+        carousel.currentIndex = carousel.totalItems - 1; // Loop to last
+    }
+    updateCarousel(trackId);
+}
+
+function goToSlide(trackId, index) {
+    const carousel = carousels[trackId];
+    if (!carousel) return;
+    
+    carousel.currentIndex = Math.max(0, Math.min(index, carousel.totalItems - 1));
+    updateCarousel(trackId);
+}
+
+// Theme toggle functionality
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    
+    // Update button icon
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+}
+
+// Initialize theme on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Set initial theme
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    
+    // Create theme toggle button
+    const themeToggle = document.createElement('button');
+    themeToggle.className = 'theme-toggle';
+    themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    themeToggle.addEventListener('click', toggleTheme);
+    document.body.appendChild(themeToggle);
+    
+    // Initialize carousels
+    const tracks = document.querySelectorAll('[id$="Track"]');
+    tracks.forEach(track => {
+        initCarousel(track.id);
+    });
+});
+
+// Touch/swipe support for mobile
+let startX = 0;
+let currentX = 0;
+let isDragging = false;
+
+document.addEventListener('touchstart', function(e) {
+    startX = e.touches[0].clientX;
+    isDragging = true;
+});
+
+document.addEventListener('touchmove', function(e) {
+    if (!isDragging) return;
+    currentX = e.touches[0].clientX;
+});
+
+document.addEventListener('touchend', function(e) {
+    if (!isDragging) return;
+    isDragging = false;
+    
+    const diffX = startX - currentX;
+    const threshold = 50;
+    
+    if (Math.abs(diffX) > threshold) {
+        const activeCarousel = Object.keys(carousels)[0];
+        if (activeCarousel) {
+            if (diffX > 0) {
+                nextSlide(activeCarousel);
+            } else {
+                prevSlide(activeCarousel);
+            }
+        }
+    }
+});
+
+
+
+
+

@@ -1,0 +1,117 @@
+/* Group Home page specific styles */
+.selection-exists {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.selection-exists h2 {
+    color: #333;
+}
+
+.selection-exists a {
+    color: #667eea;
+    font-weight: 600;
+}
+
+.current-order {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+    border-left: 4px solid #28a745;
+}
+
+.current-order h3 {
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.current-order p {
+    color: #666;
+    margin-bottom: 0.25rem;
+}
+
+/* Restaurant management carousels */
+.restaurant-management .carousel-item {
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin: 0.5rem;
+    padding: 1rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.restaurant-management .carousel-item:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+}
+
+.restaurant-management input[type="radio"],
+.restaurant-management input[type="checkbox"] {
+    margin-right: 0.5rem;
+}
+
+.restaurant-management label {
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.restaurant-management ul {
+    margin-top: 0.5rem;
+    padding-left: 1rem;
+}
+
+.restaurant-management li {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.restaurant-management a {
+    color: #667eea;
+    font-weight: 500;
+}
+
+/* New restaurant form */
+.new-restaurant-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.new-restaurant-form input {
+    padding: 10px 12px;
+    border: 2px solid #e1e5e9;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.new-restaurant-form input:focus {
+    border-color: #667eea;
+    outline: none;
+}
+
+/* Admin/selector messages */
+.permission-message {
+    background: #fff3cd;
+    color: #856404;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #ffeaa7;
+    text-align: center;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .restaurant-management .carousel-item {
+        margin: 0.25rem;
+        padding: 0.75rem;
+    }
+}

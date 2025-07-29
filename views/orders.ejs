@@ -3,9 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Your Orders - PiKwik</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/orders.css">
 </head>
 <body>
+    <div class="app-header">
+        <h1 class="app-title">PiKwik</h1>
+        <p class="app-subtitle">Group Food Ordering Made Simple</p>
+    </div>
 
     <nav class="nav">
         <ul>
@@ -18,133 +24,208 @@
     </nav>
         
     <% if (ordersAlreadyPlaced){ %>
-        <p>You have already received orders for your choice. You may no longer change your selection.</p>
+        <div class="orders-status">
+            <p>You have already received orders for your choice. You may no longer change your selection.</p>
+        </div>
     <% } %>
-    <% if (selection){ %>
-    <h1><%= selector.userName + "'s" %> choice today was <%= selection.name %></h1>
-    <% }else{ %>
-    <h1><%= selector.userName === user.userName ? `You have` : `${selector.userName} has` %> not made a selection yet!</h1>
-    <% } %>
+
+    <div class="orders-status">
+        <% if (selection){ %>
+            <h1><%= selector.userName + "'s" %> choice today was <%= selection.name %></h1>
+        <% }else{ %>
+            <h1><%= selector.userName === user.userName ? `You have` : `${selector.userName} has` %> not made a selection yet!</h1>
+        <% } %>
+    </div>
     
-    <main class="order">
     <% if (hasOrdered){ %>
-        <h3><%= `${user.userName}'s current order for today:` %></h3>
-        <p><%= `Order: ${history[0].order}` %></p>
-        <p><%= `Notes: ${history[0].notes}` %></p>
+        <main class="order">
+            <h3><%= `${user.userName}'s current order for today:` %></h3>
+            <p><%= `Order: ${history[0].order}` %></p>
+            <p><%= `Notes: ${history[0].notes}` %></p>
+        </main>
     <% } %>
-    </main>
-<% if (selection){ %>
-    <h3>View the <%= selection.name %> Details</h3>
-    <div class="selection-details">
-        <ul>
-            <li class="menu"><a href="<%= selection.menu %>">Menu</a></li>
-            <li class="phone">Phone: <%= `${selection.phone.slice(0,3)}-${selection.phone.slice(3,6)}-${selection.phone.slice(7)}` %></li>
-            <li class="address">Address: <%= selection.address %></li>
-        </ul>
-    <% if (history.length){ %>
-            <div class="order-history">
-            <h4>Previous Orders from <%= selection.name %></h4>
-        <% if (hasOrdered) history = history.slice(0,-1) %>
-        <% history.forEach(el => { %>
-            <div class="prev-order-group">
-                 <input type="hidden" id="hasOrdered" value="<%= hasOrdered %>">
-                <ul>
-                    <li class="prev-order">
-                        <p><%= el.order %></p>
-                    </li>
-                    <li class="prev-notes">
-                        <p><%= el.notes %></p>
-                    </li>
-                    <li class="prev-date">
-                        <p><%= el.createdAt.toDateString() %></p>
-                    </li>
-                </ul>
-                <button class="resubmit-order">Submit This Order Again</button>
-            </div>
-        <% }) %>
-        </div>
-    <%}%>
-    </div>
-<% } %>
-<% if (!hasOrdered){ %>
-    <form action="/orders/submitOrder" method="POST">
-        <fieldset>
-            <legend>Place Your Order here</legend>
-            <textarea name="userOrder" id="userOrder" rows="5" cols="40"></textarea>
-            <textarea name="notes" id="notes" rows="5" cols="40"></textarea>
-        <% if (selection){ %>
-            <input type="hidden" name="isSelector" value="<%= isSelector %>">
-            <input type="submit">
-        <% }else{ %>
-            <p>Restaurant selection has not been submitted yet.</p>
-        <% } %>
-        </fieldset>
-    </form>
-<% }else{ %>
-    <form action="/orders/changeOrder" method="POST">
-        <fieldset>
-            <legend>Change Your Order here</legend>
-            <textarea name="userOrderChanges" id="userOrder" rows="5" cols="40"></textarea>
-            <textarea name="notesChanges" id="notes" rows="5" cols="40"></textarea>
-        <% if (selection){ %>
-            <input type="hidden" name="isSelector" value="<%= isSelector %>">
-            <input type="submit">
-        <% }else{ %>
-            <p>Restaurant selection has not been submitted yet.</p>
-        <% } %>
-        </fieldset>
-    </form>
-<% } %>
-<% if (!selection && isSelector){ %>
-    <div class="form-container">
-        <div class="form-line" onclick="toggleForm(event)">
-            <span>Submit today's restaurant!</span>
-            <span class="expand-icon">▼</span>
-        </div>
-        
-        <div class="form-content">
-            <div class="form-inner">
-                <form action="/groupHome/submitChoice" method="POST">
-                <% restaurants.forEach(el => { %>
-                    <div class="form-group">
-                        <input type="radio" name="restId" value="<%=el._id%>" id="<%=el._id%>">
-                        <label for="<%=el._id%>"><%=el.name%></label>
-                        <ul>
-                            <li><p><a href="<%= el.menu %>" target="_blank">Menu</a></p></li>
-                            <li><p>Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></p></li>
-                            <li><p>Address: <%= el.address %></p></li>
-                        </ul>
+
+    <% if (selection){ %>
+        <div class="selection-details">
+            <h3>View the <%= selection.name %> Details</h3>
+            <ul>
+                <li class="menu"><a href="<%= selection.menu %>" target="_blank">Menu</a></li>
+                <li class="phone">Phone: <%= `${selection.phone.slice(0,3)}-${selection.phone.slice(3,6)}-${selection.phone.slice(7)}` %></li>
+                <li class="address">Address: <%= selection.address %></li>
+            </ul>
+
+            <% if (history && history.length){ %>
+                <div class="order-history">
+                    <h4>Previous Orders from <%= selection.name %></h4>
+                    <% if (hasOrdered) history = history.slice(0,-1) %>
+                    <div class="carousel-container history-carousel">
+                        <div class="carousel-track" id="historyTrack">
+                            <% history.forEach((el, index) => { %>
+                            <div class="carousel-item">
+                                <div class="prev-order-group">
+                                    <input type="hidden" id="hasOrdered" value="<%= hasOrdered %>">
+                                    <ul>
+                                        <li class="prev-order">
+                                            <p><%= el.order %></p>
+                                        </li>
+                                        <li class="prev-notes">
+                                            <p><%= el.notes %></p>
+                                        </li>
+                                        <li class="prev-date">
+                                            <p><%= el.createdAt.toDateString() %></p>
+                                        </li>
+                                    </ul>
+                                    <button class="resubmit-order">Submit This Order Again</button>
+                                </div>
+                            </div>
+                            <% }) %>
+                        </div>
+                        <div class="carousel-controls">
+                            <button type="button" class="carousel-btn" onclick="prevSlide('historyTrack')">← Prev</button>
+                            <div class="carousel-pagination" id="historyPagination"></div>
+                            <button type="button" class="carousel-btn" onclick="nextSlide('historyTrack')">Next →</button>
+                        </div>
                     </div>
-                <% }) %>
-                <% if (!restaurants.length){ %>
-                    <p>No restaurants exist. Add existing or new ones below.</p>
-                <% } %>
-                    <button type="submit" class="submit-btn">Submit Choice</button>
-                </form>
+                </div>
+            <%}%>
+        </div>
+    <% } %>
+
+    <% if (!hasOrdered){ %>
+        <div class="form-container">
+            <div class="form-line" onclick="toggleForm(event)">
+                <span>Place Your Order</span>
+                <span class="expand-icon">▼</span>
+            </div>
+            
+            <div class="form-content">
+                <div class="form-inner">
+                    <form action="/orders/submitOrder" method="POST" class="order-form">
+                        <fieldset>
+                            <legend>Place Your Order here</legend>
+                            <label for="userOrder">Your Order:</label>
+                            <textarea name="userOrder" id="userOrder" rows="5" cols="40" placeholder="Enter your order..." required></textarea>
+                            <label for="notes">Special Notes:</label>
+                            <textarea name="notes" id="notes" rows="5" cols="40" placeholder="Any special notes..."></textarea>
+                            <% if (selection){ %>
+                                <input type="hidden" name="isSelector" value="<%= isSelector %>">
+                                <input type="submit" value="Submit Order">
+                            <% }else{ %>
+                                <p>Restaurant selection has not been submitted yet.</p>
+                            <% } %>
+                        </fieldset>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-<% }else if (isSelector){ %>
-    <form action="/orders/changeRestaurant" method="POST">
-        <fieldset>
-            <legend>Change Today's Selection</legend>
-            <div class="form-carousel">
-            <%  %>
-            <% restaurants.forEach(el => { %>
-                <input type="radio" name="newSelection" value="<%= el._id %>">
-                <label for="newSelection"><%= el.name %></label>
-                <ul>
-                    <li class="menu"><a href="<%= el.menu %>" target="_blank">Menu</a></li>
-                    <li class="phone">Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></li>
-                    <li class="address">Address: <%= el.address %></li>
-                </ul>
-            <% }) %>
+    <% }else{ %>
+        <div class="form-container">
+            <div class="form-line" onclick="toggleForm(event)">
+                <span>Change Your Order</span>
+                <span class="expand-icon">▼</span>
             </div>
-            <input type="hidden" name="groupId" value="<%= user.group._id %>">
-            <input type="submit">
-        </fieldset>
-    </form>
-<% } %>
+            
+            <div class="form-content">
+                <div class="form-inner">
+                    <form action="/orders/changeOrder" method="POST" class="order-form">
+                        <fieldset>
+                            <legend>Change Your Order here</legend>
+                            <label for="userOrderChanges">Updated Order:</label>
+                            <textarea name="userOrderChanges" id="userOrderChanges" rows="5" cols="40" placeholder="Enter your order changes..."></textarea>
+                            <label for="notesChanges">Updated Notes:</label>
+                            <textarea name="notesChanges" id="notesChanges" rows="5" cols="40" placeholder="Any special notes..."></textarea>
+                            <% if (selection){ %>
+                                <input type="hidden" name="isSelector" value="<%= isSelector %>">
+                                <input type="submit" value="Update Order">
+                            <% }else{ %>
+                                <p>Restaurant selection has not been submitted yet.</p>
+                            <% } %>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <% } %>
+
+    <% if (!selection && isSelector){ %>
+        <div class="form-container">
+            <div class="form-line" onclick="toggleForm(event)">
+                <span>Submit today's restaurant!</span>
+                <span class="expand-icon">▼</span>
+            </div>
+            
+            <div class="form-content">
+                <div class="form-inner">
+                    <form action="/groupHome/submitChoice" method="POST">
+                        <div class="carousel-container restaurant-selection">
+                            <div class="carousel-track" id="restaurantSelectionTrack">
+                                <% restaurants.forEach((el, index) => { %>
+                                <div class="carousel-item">
+                                    <input type="radio" name="restId" value="<%=el._id%>" id="select_<%=index%>">
+                                    <label for="select_<%=index%>"><%=el.name%></label>
+                                    <ul>
+                                        <li><a href="<%= el.menu %>" target="_blank">Menu</a></li>
+                                        <li>Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></li>
+                                        <li>Address: <%= el.address %></li>
+                                    </ul>
+                                </div>
+                                <% }) %>
+                            </div>
+                            <div class="carousel-controls">
+                                <button type="button" class="carousel-btn" onclick="prevSlide('restaurantSelectionTrack')">← Prev</button>
+                                <div class="carousel-pagination" id="restaurantSelectionPagination"></div>
+                                <button type="button" class="carousel-btn" onclick="nextSlide('restaurantSelectionTrack')">Next →</button>
+                            </div>
+                        </div>
+                        <% if (!restaurants.length){ %>
+                            <p>No restaurants exist. Add existing or new ones below.</p>
+                        <% } else { %>
+                            <button type="submit" class="submit-btn">Submit Choice</button>
+                        <% } %>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <% }else if (isSelector){ %>
+        <div class="form-container">
+            <div class="form-line" onclick="toggleForm(event)">
+                <span>Change Today's Selection</span>
+                <span class="expand-icon">▼</span>
+            </div>
+            
+            <div class="form-content">
+                <div class="form-inner">
+                    <form action="/orders/changeRestaurant" method="POST">
+                        <fieldset>
+                            <legend>Change Today's Selection</legend>
+                            <div class="carousel-container restaurant-selection">
+                                <div class="carousel-track" id="changeRestaurantTrack">
+                                    <% restaurants.forEach((el, index) => { %>
+                                    <div class="carousel-item">
+                                        <input type="radio" name="newSelection" value="<%= el._id %>" id="change_<%=index%>">
+                                        <label for="change_<%=index%>"><%= el.name %></label>
+                                        <ul>
+                                            <li><a href="<%= el.menu %>" target="_blank">Menu</a></li>
+                                            <li>Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></li>
+                                            <li>Address: <%= el.address %></li>
+                                        </ul>
+                                    </div>
+                                    <% }) %>
+                                </div>
+                                <div class="carousel-controls">
+                                    <button type="button" class="carousel-btn" onclick="prevSlide('changeRestaurantTrack')">← Prev</button>
+                                    <div class="carousel-pagination" id="changeRestaurantPagination"></div>
+                                    <button type="button" class="carousel-btn" onclick="nextSlide('changeRestaurantTrack')">Next →</button>
+                                </div>
+                            </div>
+                            <input type="hidden" name="groupId" value="<%= user.group._id %>">
+                            <input type="submit" value="Change Selection">
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <% } %>
     
     <script src="js/main.js"></script>
 </body>

@@ -31,6 +31,8 @@ module.exports = {
             const isSelector = selector._id.toString() === user._id.toString();
             const group = user.group || null;
 
+            console.log({restaurants,user,group})
+
             res.render('groups.ejs', {
                 groups: allGroups,
                 user,

@@ -1,0 +1,119 @@
+/* Groups page specific styles */
+.selection-info {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.selection-info h2 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.selection-info ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.selection-info li {
+    background: #f8f9fa;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.selection-info a {
+    color: #667eea;
+    font-weight: 500;
+}
+
+.order-display {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.order-display h3, .order-display h4 {
+    color: #333;
+}
+
+.order-display p {
+    color: #666;
+    background: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border-left: 4px solid #667eea;
+}
+
+/* Restaurant carousel */
+.restaurant-carousel .carousel-item {
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin: 0.5rem;
+    padding: 1rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.restaurant-carousel .carousel-item:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+}
+
+.restaurant-carousel input[type="radio"] {
+    margin-right: 0.5rem;
+}
+
+.restaurant-carousel label {
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+}
+
+.restaurant-carousel ul {
+    margin-top: 0.5rem;
+    padding-left: 1rem;
+}
+
+.restaurant-carousel li {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Groups list carousel */
+.groups-carousel .carousel-item {
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin: 0.5rem;
+    padding: 1rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.groups-carousel .carousel-item:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+}
+
+.groups-carousel input[type="radio"] {
+    margin-right: 0.5rem;
+}
+
+.groups-carousel label {
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .selection-info ul {
+        flex-direction: column;
+    }
+}

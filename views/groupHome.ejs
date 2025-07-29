@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <link rel="stylesheet" href="css/style.css">
-    </head>
-    <body>
-        
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Home - PiKwik</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/groupHome.css">
+</head>
+<body>
+    <div class="app-header">
+        <h1 class="app-title">PiKwik</h1>
+        <p class="app-subtitle">Group Food Ordering Made Simple</p>
+    </div>
+
     <nav class="nav">
         <ul>
             <li><a href="/groups">Home</a></li>
@@ -19,21 +24,20 @@
         </ul>
     </nav>
 
-<% if (selection !== null){ %>
-    <div class="selection-exists">
-<% if (!orderedToday){ %>
-        <h2>Your group has selected a restaurant! Place your order <a href="/orders">HERE</a></h2>
-<% }else{ %>
-        <h2>If you wish to change your order, you may do so <a href="/orders">HERE</a></h2>
-        <section class="current-order">
-            <h3><%= `${user.userName}'s current order for today:` %></h3>
-            <p><%= `Order: ${order.order}` %></p>
-            <p><%= `Notes: ${order.notes}` %></p>
-        </section>
-    </div>
-<% } %>
-<% } %>
-
+    <% if (selection !== null){ %>
+        <div class="selection-exists">
+            <% if (!orderedToday){ %>
+                <h2>Your group has selected a restaurant! Place your order <a href="/orders">HERE</a></h2>
+            <% }else{ %>
+                <h2>If you wish to change your order, you may do so <a href="/orders">HERE</a></h2>
+                <section class="current-order">
+                    <h3><%= `${user.userName}'s current order for today:` %></h3>
+                    <p><%= `Order: ${order.order}` %></p>
+                    <p><%= `Notes: ${order.notes}` %></p>
+                </section>
+            <% } %>
+        </div>
+    <% } %>
 
     <div class="form-container">
         <div class="form-line" onclick="toggleForm(event)">
@@ -44,25 +48,34 @@
         <div class="form-content">
             <div class="form-inner">
                 <form action="/groupHome/submitChoice" method="POST">
-                <% groupRestaurants.forEach(el => { %>
-                    <div class="form-group">
-                        <input type="radio" name="restId" value="<%=el._id%>" id="<%=el._id%>">
-                        <label for="<%=el._id%>"><%=el.name%></label>
-                        <ul>
-                            <li><p><a href="<%= el.menu %>" target="_blank">Menu</a></p></li>
-                            <li><p>Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></p></li>
-                            <li><p>Address: <%= el.address %></p></li>
-                        </ul>
+                    <div class="carousel-container restaurant-management">
+                        <div class="carousel-track" id="groupRestaurantsTrack">
+                            <% groupRestaurants.forEach((el, index) => { %>
+                            <div class="carousel-item">
+                                <input type="radio" name="restId" value="<%=el._id%>" id="group_rest_<%=index%>">
+                                <label for="group_rest_<%=index%>"><%=el.name%></label>
+                                <ul>
+                                    <li><a href="<%= el.menu %>" target="_blank">Menu</a></li>
+                                    <li>Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></li>
+                                    <li>Address: <%= el.address %></li>
+                                </ul>
+                            </div>
+                            <% }) %>
+                        </div>
+                        <div class="carousel-controls">
+                            <button type="button" class="carousel-btn" onclick="prevSlide('groupRestaurantsTrack')">← Prev</button>
+                            <div class="carousel-pagination" id="groupRestaurantsPagination"></div>
+                            <button type="button" class="carousel-btn" onclick="nextSlide('groupRestaurantsTrack')">Next →</button>
+                        </div>
                     </div>
-                <% }) %>
-                <% if (!groupRestaurants.length){ %>
-                    <p>No restaurants exist. Add existing or new ones below.</p>
-                <% } %>
-                <% if (isSelector){ %>
-                    <button type="submit" class="submit-btn">Submit Choice</button>
-                <% }else{ %>
-                    <p>It's not your choice today!</p>
-                <% } %>
+                    <% if (!groupRestaurants.length){ %>
+                        <p>No restaurants exist. Add existing or new ones below.</p>
+                    <% } %>
+                    <% if (isSelector){ %>
+                        <button type="submit" class="submit-btn">Submit Choice</button>
+                    <% }else{ %>
+                        <p class="permission-message">It's not your choice today!</p>
+                    <% } %>
                 </form>
             </div>
         </div>
@@ -70,69 +83,43 @@
 
     <div class="form-container">
         <div class="form-line" onclick="toggleForm(event)">
-            <span>Remove Restaurants from Your Group!</span>
-            <span class="expand-icon">▼</span>
-        </div>
-        
-        <div class="form-content">
-            <div class="form-inner">
-                <form action="/groupHome/deleteRest" method="POST">
-                <% groupRestaurants.forEach(el => { %>
-                    <div class="form-group">
-                        <input type="checkbox" name="restId" value="<%=el._id%>" id="<%=el._id%>">
-                        <label for="<%=el._id%>"><%=el.name%></label>
-                        <ul>
-                            <li><p><a href="<%= el.menu %>" target="_blank">Menu</a></p></li>
-                            <li><p>Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></p></li>
-                            <li><p>Address: <%= el.address %></p></li>
-                        </ul>
-                    </div>
-                <% }) %>
-                <% if (!groupRestaurants.length){ %>
-                    <p>No restaurants exist in group.</p>
-                <% } %>
-                <% if (isAdmin){ %>
-                    <button type="submit" class="submit-btn">Remove Restaurants</button>
-                <% }else{ %>
-                    <p>You're not this groups administrator!</p>
-                <% } %>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-
-        
-    <div class="form-container">
-        <div class="form-line" onclick="toggleForm(event)">
-            <span>Add Existing Restaurant To Your Group!</span>
+            <span>Add Existing Restaurant to Your Group!</span>
             <span class="expand-icon">▼</span>
         </div>
         
         <div class="form-content">
             <div class="form-inner">
                 <form action="/groupHome/addExistingRestaurant" method="POST">
-                <% otherRests.forEach(el => { %>
-                    <div class="form-group">
-                        <input type="radio" name="restId" value="<%=el._id%>" id="<%=el._id%>">
-                        <label for="restId"><%=el.name%></label>
-                        <ul>
-                            <li><p><a href="<%= el.menu %>" target="_blank">Menu</a></p></li>
-                            <li><p>Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></p></li>
-                            <li><p>Address: <%= el.address %></p></li>
-                        </ul>
+                    <div class="carousel-container restaurant-management">
+                        <div class="carousel-track" id="otherRestaurantsTrack">
+                            <% otherRests.forEach((el, index) => { %>
+                            <div class="carousel-item">
+                                <input type="checkbox" name="restId" value="<%=el._id%>" id="other_rest_<%=index%>">
+                                <label for="other_rest_<%=index%>"><%=el.name%></label>
+                                <ul>
+                                    <li><a href="<%= el.menu %>" target="_blank">Menu</a></li>
+                                    <li>Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></li>
+                                    <li>Address: <%= el.address %></li>
+                                </ul>
+                            </div>
+                            <% }) %>
+                        </div>
+                        <div class="carousel-controls">
+                            <button type="button" class="carousel-btn" onclick="prevSlide('otherRestaurantsTrack')">← Prev</button>
+                            <div class="carousel-pagination" id="otherRestaurantsPagination"></div>
+                            <button type="button" class="carousel-btn" onclick="nextSlide('otherRestaurantsTrack')">Next →</button>
+                        </div>
                     </div>
-                <% }) %>
-                <% if (!otherRests.length){ %>
-                    <p>The group contains all restaurants in the database.</p>
-                <% } %>
-                    <button type="submit" class="submit-btn">Add To Group</button>
+                    <% if (!otherRests.length){ %>
+                        <p>No other restaurants exist.</p>
+                    <% } else { %>
+                        <button type="submit" class="submit-btn">Add Selected Restaurants</button>
+                    <% } %>
                 </form>
             </div>
         </div>
     </div>
-    
+
     <div class="form-container">
         <div class="form-line" onclick="toggleForm(event)">
             <span>Create New Restaurant and Add it To Your Group!</span>
@@ -141,20 +128,28 @@
         
         <div class="form-content">
             <div class="form-inner">
-                <form action="/groupHome/addNewRestaurant" method="POST">
+                <form action="/groupHome/addNewRestaurant" method="POST" class="new-restaurant-form">
                     <div class="form-group">
-                        <input type="text" placeholder="Name" name='restaurantName'>
-                        <input type="url" placeholder="Menu Site" name='restaurantURL'>
-                        <input type="tel" placeholder="Telephone" name='restaurantPhone'>
-                        <input type="address" placeholder="Address" name='address'>
+                        <label for="restaurantName">Restaurant Name</label>
+                        <input type="text" placeholder="Name" name='restaurantName' id="restaurantName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="restaurantURL">Menu Website</label>
+                        <input type="url" placeholder="Menu Site" name='restaurantURL' id="restaurantURL" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="restaurantPhone">Phone Number</label>
+                        <input type="tel" placeholder="Telephone" name='restaurantPhone' id="restaurantPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" placeholder="Address" name='address' id="address" required>
                     </div>
                     <button type="submit" class="submit-btn">Create Restaurant</button>
                 </form>
             </div>
         </div>
-    </div> 
-
-    <a href="/logout">Logout</a>
+    </div>
 
     <script src="js/main.js"></script>
 </body>

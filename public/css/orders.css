@@ -1,0 +1,241 @@
+/* Orders page specific styles */
+.orders-status {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.orders-status h1 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.orders-status p {
+    color: #666;
+    font-weight: 500;
+}
+
+.order {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.order h3 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.order p {
+    color: #666;
+    background: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border-left: 4px solid #667eea;
+    margin-bottom: 0.5rem;
+}
+
+/* Selection details */
+.selection-details {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.selection-details h3 {
+    color: #333;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.selection-details > ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.selection-details > ul > li {
+    background: #f8f9fa;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.selection-details a {
+    color: #667eea;
+    font-weight: 500;
+}
+
+/* Order history carousel */
+.order-history {
+    margin-top: 1.5rem;
+}
+
+.order-history h4 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.history-carousel .carousel-item {
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin: 0.5rem;
+    padding: 1rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.history-carousel .carousel-item:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+}
+
+.prev-order-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.prev-order-group ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.prev-order-group li {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.prev-order p {
+    background: #fff;
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
+    margin: 0;
+}
+
+.resubmit-order {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    width: auto;
+}
+
+.resubmit-order:hover {
+    background: #218838;
+    transform: translateY(-1px);
+}
+
+/* Order forms - Fixed backgrounds */
+.order-form {
+    background: var(--bg-form) !important;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    box-shadow: 0 8px 32px var(--shadow-light);
+}
+
+.order-form fieldset {
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    background: var(--bg-secondary) !important;
+}
+
+.order-form legend {
+    color: var(--text-primary) !important;
+    font-weight: 600;
+    padding: 0 0.5rem;
+    background: var(--bg-form) !important;
+}
+
+.order-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    background: var(--bg-carousel-item) !important;
+    color: var(--text-primary) !important;
+}
+
+.order-form textarea:focus {
+    border-color: #667eea;
+    outline: none;
+}
+
+.order-form p {
+    color: var(--text-secondary) !important;
+}
+
+.order-form label {
+    color: var(--text-primary) !important;
+}
+
+/* Restaurant selection carousel */
+.restaurant-selection .carousel-item {
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin: 0.5rem;
+    padding: 1rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.restaurant-selection .carousel-item:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+}
+
+.restaurant-selection input[type="radio"] {
+    margin-right: 0.5rem;
+}
+
+.restaurant-selection label {
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.restaurant-selection ul {
+    margin-top: 0.5rem;
+    padding-left: 1rem;
+}
+
+.restaurant-selection li {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+@media (max-width: 768px) {
+    .selection-details > ul {
+        flex-direction: column;
+    }
+    
+    .prev-order-group ul {
+        gap: 0.5rem;
+    }
+}
+

@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Groups - PiKwik</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/groups.css">
 </head>
 <body>
+    <div class="app-header">
+        <h1 class="app-title">PiKwik</h1>
+        <p class="app-subtitle">Group Food Ordering Made Simple</p>
+    </div>
 
     <nav class="nav">
         <ul>
@@ -18,126 +23,214 @@
             <li><a href="/logout">Logout</a></li>
         </ul>
     </nav>
+
     <% if (selection){ %>
-    <h2><%= selection.name %> is <%= selector.userName %>'s choice today!</h2>
-    <ul>
-        <li class="menu"><a href="<%= selection.menu %>">Menu</a></li>
-        <li class="phone">Phone: <%= `${selection.phone.slice(0,3)}-${selection.phone.slice(3,6)}-${selection.phone.slice(7)}` %></li>
-        <li class="address">Address: <%= selection.address %></li>
-    </ul>
-    <% if (isSelector){ %>
-        <h4>You may change the selection here!</h4>
-        <form action="/orders/changeRestaurant" method="POST">
-            <fieldset>
-                <legend>Change Today's Selection</legend>
-                <div class="form-carousel">
-                <% restaurants.forEach(el => { %>
-                    <input type="radio" name="newSelection" value="<%= el._id %>">
-                    <label for="newSelection"><%= el.name %></label>
-                    <ul>
-                        <li class="menu"><a href="<%= el.menu %>" target="_blank">Menu</a></li>
-                        <li class="phone">Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></li>
-                        <li class="address">Address: <%= el.address %></li>
-                    </ul>
-                <% }) %>
+    <div class="selection-info">
+        <h2><%= selection.name %> is <%= selector.userName %>'s choice today!</h2>
+        <ul>
+            <li class="menu"><a href="<%= selection.menu %>" target="_blank">Menu</a></li>
+            <li class="phone">Phone: <%= `${selection.phone.slice(0,3)}-${selection.phone.slice(3,6)}-${selection.phone.slice(7)}` %></li>
+            <li class="address">Address: <%= selection.address %></li>
+        </ul>
+        
+        <% if (isSelector){ %>
+            <div class="form-container">
+                <div class="form-line" onclick="toggleForm(event)">
+                    <span>Change Today's Selection</span>
+                    <span class="expand-icon">▼</span>
                 </div>
-                <input type="hidden" name="groupId" value="<%= user.group._id %>">
-                <input type="submit">
-            </fieldset>
-        </form>
-    <%}%>
-    <% if (orderedToday){ %>
-        <h3>You have placed your order today!</h4>
-        <main class="order">
-            <h4><%= `${user.userName}'s current order for today:` %></h3>
-            <p><%= `Order: ${order.order}` %></p>
-            <p><%= `Notes: ${order.notes}` %></p>
-        </main>
-        <form action="/orders/changeOrder" method="POST">
-            <fieldset>
-                <legend>Change Your Order here</legend>
-                <textarea name="userOrderChanges" id="userOrder" rows="5" cols="40"></textarea>
-                <textarea name="notesChanges" id="notes" rows="5" cols="40"></textarea>
-                <input type="hidden" name="isSelector" value="<%= isSelector %>">
-                <input type="submit">
-            </fieldset>
-        </form>
-    <% } else{ %>
-        <form action="/orders/submitOrder" method="POST">
-            <fieldset>
-                <legend>Place Your Order here</legend>
-                <textarea name="userOrder" id="userOrder" rows="5" cols="40"></textarea>
-                <textarea name="notes" id="notes" rows="5" cols="40"></textarea>
-                <input type="hidden" name="isSelector" value="<%= isSelector %>">
-                <input type="submit">
-            </fieldset>
-        </form>
+                
+                <div class="form-content">
+                    <div class="form-inner">
+                        <form action="/orders/changeRestaurant" method="POST">
+                            <fieldset>
+                                <legend>Change Today's Selection</legend>
+                                <div class="carousel-container restaurant-carousel">
+                                    <div class="carousel-track" id="restaurantTrack">
+                                        <% restaurants.forEach((el, index) => { %>
+                                        <div class="carousel-item">
+                                            <input type="radio" name="newSelection" value="<%= el._id %>" id="rest_<%= index %>">
+                                            <label for="rest_<%= index %>"><%= el.name %></label>
+                                            <ul>
+                                                <li class="menu"><a href="<%= el.menu %>" target="_blank">Menu</a></li>
+                                                <li class="phone">Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></li>
+                                                <li class="address">Address: <%= el.address %></li>
+                                            </ul>
+                                        </div>
+                                        <% }) %>
+                                    </div>
+                                    <div class="carousel-controls">
+                                        <button type="button" class="carousel-btn" onclick="prevSlide('restaurantTrack')">← Prev</button>
+                                        <div class="carousel-pagination" id="restaurantPagination"></div>
+                                        <button type="button" class="carousel-btn" onclick="nextSlide('restaurantTrack')">Next →</button>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="groupId" value="<%= user.group._id %>">
+                                <input type="submit" value="Change Selection">
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        <%}%>
+    </div>
     <% } %>
-<% }else{ %>
-    <h2><%= selector.userName === user.userName ? 'You have' : `${selector.userName} has` %> not selected a restaurant yet!</h2>
-    <% if (isSelector){ %>
+
+    <% if (orderedToday){ %>
+        <div class="order-display">
+            <h3>You have placed your order today!</h3>
+            <main class="order">
+                <h4><%= `${user.userName}'s current order for today:` %></h4>
+                <p><%= `Order: ${order.order}` %></p>
+                <p><%= `Notes: ${order.notes}` %></p>
+            </main>
+        </div>
+        
         <div class="form-container">
             <div class="form-line" onclick="toggleForm(event)">
-                <span>Submit today's restaurant!</span>
+                <span>Change Your Order</span>
                 <span class="expand-icon">▼</span>
             </div>
-
+            
             <div class="form-content">
                 <div class="form-inner">
-                    <form action="/groupHome/submitChoice" method="POST">
-                    <% restaurants.forEach(el => { %>
-                        <div class="form-group">
-                            <input type="radio" name="restId" value="<%=el._id%>" id="<%=el._id%>">
-                            <label for="<%=el._id%>"><%=el.name%></label>
-                            <ul>
-                                <li><p><a href="<%= el.menu %>" target="_blank">Menu</a></p></li>
-                                <li><p>Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></p></li>
-                                <li><p>Address: <%= el.address %></p></li>
-                            </ul>
-                        </div>
-                    <% }) %>
-                    <% if (restaurants.length){ %>
-                        <p>No restaurants exist in the group. Add one in <a href="/groupHome">your group home page</a></p>
-                    <% } %>
-                    <% if (isSelector){ %>
-                        <button type="submit" class="submit-btn">Submit Choice</button>
-                    <% }else{ %>
-                        <p>It's not your choice today!</p>
-                    <% } %>
+                    <form action="/orders/changeOrder" method="POST" class="order-form">
+                        <fieldset>
+                            <legend>Change Your Order here</legend>
+                            <textarea name="userOrderChanges" id="userOrder" rows="5" cols="40" placeholder="Enter your order changes..."></textarea>
+                            <textarea name="notesChanges" id="notes" rows="5" cols="40" placeholder="Any special notes..."></textarea>
+                            <input type="hidden" name="isSelector" value="<%= isSelector %>">
+                            <input type="submit" value="Update Order">
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <% } else if (selection) { %>
+        <div class="form-container">
+            <div class="form-line" onclick="toggleForm(event)">
+                <span>Place Your Order</span>
+                <span class="expand-icon">▼</span>
+            </div>
+            
+            <div class="form-content">
+                <div class="form-inner">
+                    <form action="/orders/submitOrder" method="POST" class="order-form">
+                        <fieldset>
+                            <legend>Place Your Order here</legend>
+                            <textarea name="userOrder" id="userOrder" rows="5" cols="40" placeholder="Enter your order..." required></textarea>
+                            <textarea name="notes" id="notes" rows="5" cols="40" placeholder="Any special notes..."></textarea>
+                            <input type="hidden" name="isSelector" value="<%= isSelector %>">
+                            <input type="submit" value="Submit Order">
+                        </fieldset>
                     </form>
                 </div>
             </div>
         </div>
     <% } %>
-<% } %>
+
+    <% if (!selection){ %>
+        <div class="selection-info">
+            <h2><%= selector.userName === user.userName ? 'You have' : `${selector.userName} has` %> not selected a restaurant yet!</h2>
+        </div>
+        
+        <% if (isSelector){ %>
+            <div class="form-container">
+                <div class="form-line" onclick="toggleForm(event)">
+                    <span>Submit today's restaurant!</span>
+                    <span class="expand-icon">▼</span>
+                </div>
+
+                <div class="form-content">
+                    <div class="form-inner">
+                        <form action="/groupHome/submitChoice" method="POST">
+                            <div class="carousel-container restaurant-carousel">
+                                <div class="carousel-track" id="selectRestaurantTrack">
+                                    <% restaurants.forEach((el, index) => { %>
+                                    <div class="carousel-item">
+                                        <input type="radio" name="restId" value="<%=el._id%>" id="select_rest_<%= index %>">
+                                        <label for="select_rest_<%= index %>"><%=el.name%></label>
+                                        <ul>
+                                            <li><a href="<%= el.menu %>" target="_blank">Menu</a></li>
+                                            <li>Phone: <%= `${el.phone.slice(0,3)}-${el.phone.slice(3,6)}-${el.phone.slice(7)}` %></li>
+                                            <li>Address: <%= el.address %></li>
+                                        </ul>
+                                    </div>
+                                    <% }) %>
+                                </div>
+                                <div class="carousel-controls">
+                                    <button type="button" class="carousel-btn" onclick="prevSlide('selectRestaurantTrack')">← Prev</button>
+                                    <div class="carousel-pagination" id="selectRestaurantPagination"></div>
+                                    <button type="button" class="carousel-btn" onclick="nextSlide('selectRestaurantTrack')">Next →</button>
+                                </div>
+                            </div>
+                            <% if (!restaurants.length){ %>
+                                <p>No restaurants exist in the group. Add one in <a href="/groupHome">your group home page</a></p>
+                            <% } else { %>
+                                <button type="submit" class="submit-btn">Submit Choice</button>
+                            <% } %>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    <% } %>
 
     <h1>Groups</h1>
-<% if (groups.length){ %>
-    <form action="/groups/joinGroup" method="POST">
-        <fieldset>
-            <legend>Existing Groups</legend>
-        <% groups.forEach( el => { %>
-            <div>
-                <input type="radio" value="<%= el._id %>" name="groupId" id="<%=el._id%>">
-                <label for="groupId"><%=el.name%></label>
+    
+    <% if (groups.length){ %>
+        <div class="form-container">
+            <div class="form-line" onclick="toggleForm(event)">
+                <span>Join Existing Group</span>
+                <span class="expand-icon">▼</span>
             </div>
-        <% }) %>
-            <input type="submit" value="Join Group">
-        </fieldset>
             
-    </form>
-        <p>Or create your own new group below!</p>
-<%}else{%>
-        <p>No groups currently exist. Create the first below!</p>
-<% }%>
+            <div class="form-content">
+                <div class="form-inner">
+                    <form action="/groups/joinGroup" method="POST">
+                        <fieldset>
+                            <legend>Existing Groups</legend>
+                            <div class="carousel-container groups-carousel">
+                                <div class="carousel-track" id="groupsTrack">
+                                    <% groups.forEach((el, index) => { %>
+                                    <div class="carousel-item">
+                                        <input type="radio" value="<%= el._id %>" name="groupId" id="group_<%= index %>">
+                                        <label for="group_<%= index %>"><%=el.name%></label>
+                                    </div>
+                                    <% }) %>
+                                </div>
+                                <div class="carousel-controls">
+                                    <button type="button" class="carousel-btn" onclick="prevSlide('groupsTrack')">← Prev</button>
+                                    <div class="carousel-pagination" id="groupsPagination"></div>
+                                    <button type="button" class="carousel-btn" onclick="nextSlide('groupsTrack')">Next →</button>
+                                </div>
+                            </div>
+                            <input type="submit" value="Join Group">
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <p style="text-align: center; color: white; margin: 1rem 0;">Or create your own new group below!</p>
+    <%}else{%>
+        <p style="text-align: center; color: white; margin: 1rem 0;">No groups currently exist. Create the first below!</p>
+    <% }%>
 
-
-    <form action="/groups/createGroup" method='POST'>
-        <input type="text" placeholder="enter group name" name='groupName'>
-        <input type="submit">
-    </form>
-
-    <a href="/logout">Logout</a>
+    <div class="form-container">
+        <div class="form-line" onclick="toggleForm(event)">
+            <span>Create New Group</span>
+            <span class="expand-icon">▼</span>
+        </div>
+        
+        <div class="form-content">
+            <div class="form-inner">
+                <form action="/groups/createGroup" method='POST'>
+                    <input type="text" placeholder="Enter group name" name='groupName' required>
+                    <input type="submit" value="Create Group">
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script src="js/main.js"></script>
 </body>
