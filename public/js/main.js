@@ -174,39 +174,55 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Touch/swipe support for mobile
+// Touch/swipe support for mobile - Fixed to not interfere with buttons
 let startX = 0;
 let currentX = 0;
 let isDragging = false;
+let activeTrackId = null;
 
 document.addEventListener('touchstart', function(e) {
-    startX = e.touches[0].clientX;
-    isDragging = true;
+    // Don't handle touch if it's on a button or control
+    if (e.target.closest('.carousel-btn') || e.target.closest('.carousel-dot')) {
+        return;
+    }
+    
+    // Find which carousel track was touched
+    const carouselItem = e.target.closest('.carousel-item');
+    if (carouselItem) {
+        const track = carouselItem.closest('.carousel-track');
+        if (track) {
+            activeTrackId = track.id;
+            startX = e.touches[0].clientX;
+            isDragging = true;
+        }
+    }
 });
 
 document.addEventListener('touchmove', function(e) {
-    if (!isDragging) return;
+    if (!isDragging || !activeTrackId) return;
     currentX = e.touches[0].clientX;
+    e.preventDefault(); // Prevent scrolling
 });
 
 document.addEventListener('touchend', function(e) {
-    if (!isDragging) return;
+    if (!isDragging || !activeTrackId) return;
     isDragging = false;
     
     const diffX = startX - currentX;
     const threshold = 50;
     
     if (Math.abs(diffX) > threshold) {
-        const activeCarousel = Object.keys(carousels)[0];
-        if (activeCarousel) {
-            if (diffX > 0) {
-                nextSlide(activeCarousel);
-            } else {
-                prevSlide(activeCarousel);
-            }
+        if (diffX > 0) {
+            nextSlide(activeTrackId);
+        } else {
+            prevSlide(activeTrackId);
         }
     }
+    
+    activeTrackId = null;
 });
+
+
 
 
 
