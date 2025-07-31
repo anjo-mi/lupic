@@ -1,4 +1,4 @@
-# PiKwik 🍕
+# PiKwik
 
 **Making a Picnic Out of Picking**
 
@@ -52,6 +52,13 @@ PiKwik streamlines the group food ordering process by providing:
 
 5. **Access the app**
    Open your browser to `http://localhost:2121`
+
+---
+
+## Testing
+```bash
+npm run test:e2e
+```
 
 ---
 
