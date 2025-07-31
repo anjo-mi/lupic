@@ -18,17 +18,21 @@ module.exports = {
             ])
             const allGroups = await Group.find();
             
-            const {
-                group: {
-                    selection,
-                    selector,
-                    restaurants
-                },
-                order
-            } = user;
+            const selection = user.group ? user.group.selection : null;
+            const selector = user.group ? user.group.selector : null;
+            const restaurants = user.group ? user.group.restaurants : null;
+            const order = user.order ? user.order : null;
+            // const {
+            //     group: {
+            //         selection,
+            //         selector,
+            //         restaurants
+            //     },
+            //     order
+            // } = user;
 
-            const orderedToday = order.createdAt.toDateString() === new Date().toDateString()
-            const isSelector = selector._id.toString() === user._id.toString();
+            const orderedToday = order ? order.createdAt.toDateString() === new Date().toDateString() : false;
+            const isSelector = selector ? selector._id.toString() === user._id.toString(): false;
             const group = user.group || null;
 
             console.log({restaurants,user,group})
