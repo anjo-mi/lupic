@@ -55,7 +55,7 @@ PiKwik streamlines the group food ordering process by providing:
 
 ---
 
-## Testing
+## ✔️ Testing
 ```bash
 npm run test:e2e
 ```
