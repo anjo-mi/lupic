@@ -15,6 +15,7 @@ module.exports = {
                     {path: 'orders'},
                 ]
             });
+            if (!user.group) return res.redirect('/groups');
             let {restaurants = [], selection, selector, orders} = user.group || {};
 
             let ordersAlreadyPlaced = false;

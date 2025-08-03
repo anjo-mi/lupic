@@ -24,7 +24,7 @@
         </ul>
     </nav>
 
-    <% if (selection){ %>
+    <% if (group && selection){ %>
     <div class="selection-info">
         <h2><%= selection.name %> is <%= selector.userName %>'s choice today!</h2>
         <ul>
@@ -76,7 +76,7 @@
     </div>
     <% } %>
 
-    <% if (orderedToday){ %>
+    <% if (group && orderedToday){ %>
         <div class="order-display">
             <h3>You have placed your order today!</h3>
             <main class="order">
@@ -106,7 +106,7 @@
                 </div>
             </div>
         </div>
-    <% } else if (selection) { %>
+    <% } else if (group && selection) { %>
         <div class="form-container">
             <div class="form-line" onclick="toggleForm(event)">
                 <span>Place Your Order</span>
@@ -129,7 +129,7 @@
         </div>
     <% } %>
 
-    <% if (!selection){ %>
+    <% if (group && !selection){ %>
         <div class="selection-info">
             <h2><%= selector.userName === user.userName ? 'You have' : `${selector.userName} has` %> not selected a restaurant yet!</h2>
         </div>

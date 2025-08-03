@@ -18,8 +18,8 @@ module.exports = {
                 ]
                 },
                 {path: 'order'}
-        ])
-            if (!user.group) return res.status(400).json({error: `User is not in a group!`})
+            ])
+            if (!user.group) return res.redirect('/groups');
             
             
             let {

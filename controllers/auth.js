@@ -50,6 +50,7 @@ const User = require('../models/User')
   
   exports.getSignup = (req, res) => {
     if (req.user) {
+      console.log(req.user)
       return res.redirect('/groups')
     }
     res.render('signup', {

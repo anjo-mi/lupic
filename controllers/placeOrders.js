@@ -16,6 +16,7 @@ module.exports = {
                     {path: 'members'},
                 ]
             });
+            if (!user.group) return res.redirect('/groups');
             const {selection, selector, orders, members} = user.group || {};
             const isSelector = req.user.id.toString() === user.group.selector._id.toString();
             let allOrdersSubmitted = false;
